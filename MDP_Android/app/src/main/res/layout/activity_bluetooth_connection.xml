@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.BluetoothConnectionActivity">
+
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/bluetoothTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bluetooth Device Connection"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Available Devices Box -->
+    <LinearLayout
+        android:id="@+id/availableDevicesBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginTop="32dp"
+        android:padding="16dp"
+        android:background="@drawable/ic_launcher_background"
+        app:layout_constraintTop_toBottomOf="@id/bluetoothTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.4">
+
+        <!-- Available Devices Title -->
+        <TextView
+            android:id="@+id/availableDevicesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Available Devices"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- List of Available Bluetooth Devices -->
+        <ListView
+            android:id="@+id/availableDeviceList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.8" />
+    </LinearLayout>
+
+    <!-- Connected Devices Box -->
+    <LinearLayout
+        android:id="@+id/connectedDevicesBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_marginTop="32dp"
+        android:padding="16dp"
+        android:background="@drawable/ic_launcher_background"
+        app:layout_constraintTop_toBottomOf="@id/availableDevicesBox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_default="percent"
+        app:layout_constraintHeight_percent="0.4">
+
+        <!-- Connected Devices Title -->
+        <TextView
+            android:id="@+id/connectedDevicesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Connected Devices"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="8dp" />
+
+        <!-- List of Connected Bluetooth Devices -->
+        <ListView
+            android:id="@+id/connectedDeviceList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.8" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
