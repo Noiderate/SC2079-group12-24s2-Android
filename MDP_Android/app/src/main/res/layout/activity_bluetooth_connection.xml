@@ -13,13 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bluetooth Device Connection"
-        android:textSize="20sp"
-        android:textStyle="bold"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
-        android:textColor="@android:color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -32,7 +29,6 @@
         android:orientation="vertical"
         android:layout_marginTop="32dp"
         android:padding="16dp"
-        android:background="@drawable/ic_launcher_background"
         app:layout_constraintTop_toBottomOf="@id/bluetoothTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,8 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Available Devices"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
             android:layout_marginBottom="8dp" />
 
         <!-- List of Available Bluetooth Devices -->
@@ -67,7 +61,6 @@
         android:orientation="vertical"
         android:layout_marginTop="32dp"
         android:padding="16dp"
-        android:background="@drawable/ic_launcher_background"
         app:layout_constraintTop_toBottomOf="@id/availableDevicesBox"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -80,8 +73,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Connected Devices"
-            android:textSize="18sp"
-            android:textColor="@android:color/black"
             android:layout_marginBottom="8dp" />
 
         <!-- List of Connected Bluetooth Devices -->

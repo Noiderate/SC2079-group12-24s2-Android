@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
             if (isBluetoothEnabled) {
                 Intent openBluetoothConnectionActivity = new Intent(this, BluetoothConnectionActivity.class);
+                //openBluetoothConnectionActivity.putExtra("bluetoothController", bluetoothController);
                 startActivity(openBluetoothConnectionActivity);
             }
         });
