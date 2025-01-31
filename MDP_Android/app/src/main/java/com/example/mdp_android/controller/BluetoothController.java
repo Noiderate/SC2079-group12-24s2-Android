@@ -1,27 +1,23 @@
 package com.example.mdp_android.controller;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import java.util.HashSet;
 
-import com.example.mdp_android.UI.MainActivity;
-
-import java.io.Serializable;
 import java.util.Set;
 
 public class BluetoothController {
@@ -30,6 +26,8 @@ public class BluetoothController {
     private Context context;
     private static BluetoothAdapter blAdapter;
     ActivityResultLauncher<Intent> bluetoothLauncher;
+    private Set<BluetoothDevice> availableDevices = new HashSet<>();
+
     public BluetoothController(Context context, ActivityResultLauncher<Intent> bluetoothLauncher) {
         this.context = context;
         this.bluetoothLauncher = bluetoothLauncher;
@@ -53,10 +51,6 @@ public class BluetoothController {
             }
         }
     }
-    // Parcela
-
-
-
 
     public BluetoothAdapter getBluetoothAdapter() {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -84,11 +78,8 @@ public class BluetoothController {
 
     public Set<BluetoothDevice> getPairedDevices() {
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
-            }
-        }
+        checkPermission();
+
         Set<BluetoothDevice> pairedDevices = blAdapter.getBondedDevices();
 
         // Check if there are any paired devices
@@ -107,14 +98,66 @@ public class BluetoothController {
         return pairedDevices;
     }
 
-    public void checkPermission(){
+    // Start scanning for nearby Bluetooth devices (not yet paired)
+
+    public void startDiscovery1() {
+        // Check permission first
+        checkPermission();
+
+        // Register for broadcasts when a device is discovered
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        context.registerReceiver(deviceFoundReceiver, filter);
+
+        // Start Bluetooth discovery
+        blAdapter.startDiscovery();
+    }
+
+    // BroadcastReceiver to capture discovered devices
+    private final BroadcastReceiver deviceFoundReceiver = new BroadcastReceiver() {
+        @Override
+
+        public void onReceive(Context context, Intent intent) {
+            Log.d("bluetooth1", "received onreceive devicefoundreceiver" );
+            checkPermission();
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                String deviceName = device.getName();
+                String deviceHardwareAddress = device.getAddress(); // MAC address
+                availableDevices.add(device); // Add to available devices set
+
+                Log.d("bluetooth1", "Discovered Device Name: " + deviceName);
+                Log.d("bluetooth1", "Discovered Device MAC Address: " + deviceHardwareAddress);
+            }
+        }
+    };
+
+    // Stop Bluetooth discovery
+    public void stopDiscovery() {
+        checkPermission();
+        blAdapter.cancelDiscovery();
+        // Unregister the receiver
+        context.unregisterReceiver(deviceFoundReceiver);
+    }
+
+    // Get the set of available devices (discovered devices)
+    public Set<BluetoothDevice> getAvailableDevices() {
+        return availableDevices;
+    }
+
+    public void checkPermission() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_DENIED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.BLUETOOTH_CONNECT}, 2);
             }
         }
     }
-
-
-
 }
+
+
+
+
+
+
+
+

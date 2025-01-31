@@ -51,6 +51,11 @@
             android:layout_marginTop="8dp"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.8" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/availableDevicesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
     <!-- Connected Devices Box -->
@@ -58,22 +63,22 @@
         android:id="@+id/connectedDevicesBox"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:orientation="vertical"
         android:layout_marginTop="32dp"
+        android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintTop_toBottomOf="@id/availableDevicesBox"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_default="percent"
-        app:layout_constraintHeight_percent="0.4">
+        app:layout_constraintHeight_percent="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/availableDevicesBox">
 
         <!-- Connected Devices Title -->
         <TextView
             android:id="@+id/connectedDevicesTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Connected Devices"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:text="Connected Devices" />
 
         <!-- List of Connected Bluetooth Devices -->
         <ListView
@@ -83,6 +88,11 @@
             android:layout_marginTop="8dp"
             app:layout_constraintHeight_default="percent"
             app:layout_constraintHeight_percent="0.8" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/connectedDevicesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
