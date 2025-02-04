@@ -41,53 +41,74 @@ public class Arena extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        if (car == null) {
-            Log.e(TAG, "Error: car is null in savesdata()!");
-            return; // Exit method to prevent crash
-        }
-
-        editor.putFloat("carX", car.getTranslationX());
-        editor.putFloat("carY", car.getTranslationY());
-        editor.putFloat("carRotation", car.getRotation());
-
-        if (car_x != null && car_y != null && car_dir != null) {
-            editor.putString("x_tv", String.valueOf(car_x.getText()));
-            editor.putString("y_tv", String.valueOf(car_y.getText()));
-            editor.putString("car_dir", String.valueOf(car_dir.getText()));
+        // Save car position and rotation
+        if (car != null) {
+            editor.putFloat("carX", car.getTranslationX());
+            editor.putFloat("carY", car.getTranslationY());
+            editor.putFloat("carRotation", car.getRotation());
         } else {
-            Log.e(TAG, "Error: car_x, car_y, or car_dir is null in savesdata()");
+            Log.e(TAG, "Car is null, cannot save car data.");
+            return; //Exit method to prevent crashing
         }
 
-        editor.apply();
+        // Save car coordinates and direction text
+        if (car_x != null && car_y != null && car_dir != null) {
+            editor.putString("x_tv", car_x.getText().toString());
+            editor.putString("y_tv", car_y.getText().toString());
+            editor.putString("car_dir", car_dir.getText().toString());
+        }
+
+        // Save obstacle positions and rotations
+        for (Map.Entry<Integer, ImageView> entry : obstacles.entrySet()) {
+            int obstacleId = entry.getKey();
+            ImageView obstacle = entry.getValue();
+
+            if (obstacle != null) {
+                editor.putFloat("obs" + obstacleId + "X", obstacle.getTranslationX());
+                editor.putFloat("obs" + obstacleId + "Y", obstacle.getTranslationY());
+                editor.putFloat("obs" + obstacleId + "Rotation", obstacle.getRotation());
+            }
+        }
+
+        editor.apply();  // Apply the changes to SharedPreferences
+        Log.d(TAG, "Arena state saved successfully!");
     }
+
 
     public void loaddata() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
-        if (obstacle1 != null) {
-            obstacle1.setX(sharedPreferences.getFloat("obs1X", 0.0f));
-            obstacle1.setY(sharedPreferences.getFloat("obs1Y", 0.0f));
-            obstacle1.setRotation(sharedPreferences.getFloat("obs1Rotation", 0.0f));
-        } else {
-            Log.e(TAG, "Error: obstacle1 is null in loaddata()");
-        }
-
+        // Load car position and rotation
         if (car != null) {
-            car.setX(sharedPreferences.getFloat("carX", 0.0f));
-            car.setY(sharedPreferences.getFloat("carY", 0.0f));
+            car.setTranslationX(sharedPreferences.getFloat("carX", 0.0f));
+            car.setTranslationY(sharedPreferences.getFloat("carY", 0.0f));
             car.setRotation(sharedPreferences.getFloat("carRotation", 0.0f));
         } else {
-            Log.e(TAG, "Error: car is null in loaddata()");
+            Log.e(TAG, "Car is null, cannot load car data.");
         }
 
+        // Load car coordinates and direction text
         if (car_x != null && car_y != null && car_dir != null) {
             car_x.setText(sharedPreferences.getString("x_tv", ""));
             car_y.setText(sharedPreferences.getString("y_tv", ""));
             car_dir.setText(sharedPreferences.getString("car_dir", ""));
-        } else {
-            Log.e(TAG, "Error: car_x, car_y, or car_dir is null in loaddata()");
         }
+
+        // Load obstacle positions and rotations
+        for (Map.Entry<Integer, ImageView> entry : obstacles.entrySet()) {
+            int obstacleId = entry.getKey();
+            ImageView obstacle = entry.getValue();
+
+            if (obstacle != null) {
+                obstacle.setTranslationX(sharedPreferences.getFloat("obs" + obstacleId + "X", 0.0f));
+                obstacle.setTranslationY(sharedPreferences.getFloat("obs" + obstacleId + "Y", 0.0f));
+                obstacle.setRotation(sharedPreferences.getFloat("obs" + obstacleId + "Rotation", 0.0f));
+            }
+        }
+
+        Log.d(TAG, "Arena state loaded successfully!");
     }
+
 
     private static final int SNAP_GRID_INTERVAL = 35;
     private static final int ANIMATOR_DURATION = 1000;
@@ -112,6 +133,13 @@ public class Arena extends AppCompatActivity {
     //ArrayList<String> s1 = new ArrayList<String>();
     //ArrayList<Integer> images = new ArrayList<Integer>();
     //RecyclerView recyclerView;
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "Back button pressed, saving data...");
+        savesdata();  // Save the arena state before exiting
+        super.onBackPressed();  // Call the default back button behavior
+    }
+
 
     protected void onPause() {
         super.onPause();
@@ -133,6 +161,8 @@ public class Arena extends AppCompatActivity {
         initialiseObstacles();
         initialiseButtons();
         initialiseMovementButtons();
+
+        loaddata();
 
         if (!firstStart) {
             loaddata();
