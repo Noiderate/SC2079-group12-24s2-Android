@@ -135,10 +135,10 @@
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="0.304"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.992"
+                app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/informationbackground" />
 
             <TextView
@@ -158,7 +158,7 @@
                 android:id="@+id/setButton"
                 android:layout_width="95dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:backgroundTint="#FFA500"
                 android:fontFamily="@font/jockey_one_regular"
                 android:paddingHorizontal="15dp"
@@ -168,19 +168,21 @@
                 android:textSize="19sp"
                 app:layout_constraintBottom_toBottomOf="@+id/mapControlTitle"
                 app:layout_constraintStart_toEndOf="@+id/mapControlTitle"
-                app:layout_constraintTop_toTopOf="@+id/mapControlTitle" />
+                app:layout_constraintTop_toTopOf="@+id/mapControlTitle"
+                app:layout_constraintVertical_bias="0.432" />
 
             <ImageButton
                 android:id="@+id/reverseButton"
                 android:layout_width="73dp"
                 android:layout_height="65dp"
                 android:layout_below="@+id/forwardButton"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="28dp"
                 android:background="@null"
                 android:paddingHorizontal="34dp"
                 android:paddingVertical="14dp"
                 android:src="@drawable/down"
                 app:layout_constraintEnd_toEndOf="@+id/forwardButton"
+                app:layout_constraintHorizontal_bias="0.911"
                 app:layout_constraintStart_toStartOf="@+id/forwardButton"
                 app:layout_constraintTop_toBottomOf="@+id/forwardButton" />
 
@@ -188,31 +190,33 @@
                 android:id="@+id/timerButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="236dp"
                 android:backgroundTint="#dc4048"
                 android:fontFamily="@font/jockey_one_regular"
                 android:text="Stop timer"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/IRTimer"
+                app:layout_constraintHorizontal_bias="0.548"
                 app:layout_constraintStart_toStartOf="@+id/IRTimer"
-                app:layout_constraintTop_toBottomOf="@+id/IRTimer" />
+                app:layout_constraintTop_toTopOf="@+id/informationBackgroundImg" />
 
             <Chronometer
                 android:id="@+id/IRTimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="52dp"
-                android:textColor="@color/white"
+                android:layout_marginTop="468dp"
+                android:textColor="#FF0000"
                 android:textSize="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/statusWindowText"
+                app:layout_constraintHorizontal_bias="0.182"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/statusWindowTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="153dp"
+                android:layout_height="40dp"
                 android:layout_marginLeft="60dp"
                 android:layout_marginTop="52dp"
                 android:fontFamily="@font/jockey_one_regular"
@@ -226,7 +230,7 @@
                 android:id="@+id/mapControlTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="40dp"
+                android:layout_marginStart="8dp"
                 android:fontFamily="@font/jockey_one_regular"
                 android:text="Map Controls:"
                 android:textColor="@color/white"
@@ -235,7 +239,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/rightButton"
                 app:layout_constraintStart_toEndOf="@+id/rightButton"
                 app:layout_constraintTop_toBottomOf="@+id/statusWindowText"
-                app:layout_constraintVertical_bias="0.69" />
+                app:layout_constraintVertical_bias="0.741" />
 
             <TextView
                 android:id="@+id/commandControlsTitle"
@@ -281,14 +285,15 @@
                 android:id="@+id/rightButton"
                 android:layout_width="65dp"
                 android:layout_height="59dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="76dp"
+                android:layout_marginTop="88dp"
                 android:layout_toRightOf="@id/leftButton"
                 android:background="@null"
                 android:paddingHorizontal="34dp"
                 android:paddingVertical="14dp"
                 android:src="@drawable/right"
                 app:layout_constraintStart_toEndOf="@+id/leftButton"
-                app:layout_constraintTop_toTopOf="@+id/leftButton" />
+                app:layout_constraintTop_toTopOf="@+id/informationBackgroundImg" />
 
             <Button
                 android:id="@+id/SPBtn"
@@ -311,13 +316,13 @@
                 android:id="@+id/forwardButton"
                 android:layout_width="73dp"
                 android:layout_height="65dp"
-                android:layout_marginTop="204dp"
+                android:layout_marginTop="160dp"
                 android:background="@null"
                 android:paddingHorizontal="34dp"
                 android:paddingVertical="14dp"
                 android:src="@drawable/up"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.032"
+                app:layout_constraintHorizontal_bias="0.177"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
@@ -325,15 +330,15 @@
                 android:id="@+id/leftButton"
                 android:layout_width="65dp"
                 android:layout_height="59dp"
-                android:layout_below="@id/forwardButton"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginEnd="4dp"
                 android:background="@null"
                 android:paddingHorizontal="34dp"
                 android:paddingVertical="14dp"
                 android:src="@drawable/left"
-                app:layout_constraintStart_toEndOf="@+id/forwardButton"
-                app:layout_constraintTop_toTopOf="@+id/forwardButton" />
+                app:layout_constraintBottom_toBottomOf="@+id/reverseButton"
+                app:layout_constraintEnd_toStartOf="@+id/forwardButton"
+                app:layout_constraintTop_toTopOf="@+id/forwardButton"
+                app:layout_constraintVertical_bias="0.708" />
 
             <TextView
                 android:id="@+id/textView9"
