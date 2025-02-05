@@ -3,12 +3,15 @@ package com.example.mdp;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,7 +28,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -175,6 +181,7 @@ public class Arena extends AppCompatActivity {
     /**
      * Initializes obstacles and setup listeners
      */
+    @SuppressLint("ClickableViewAccessibility")
     private void initialiseObstacles() {
         obstacle1 = findViewById(R.id.obstacle1);
         obstacle2 = findViewById(R.id.obstacle2);
@@ -185,334 +192,39 @@ public class Arena extends AppCompatActivity {
         obstacle7 = findViewById(R.id.obstacle7);
         obstacle8 = findViewById(R.id.obstacle8);
 
-        obstacles = new HashMap<Integer, ImageView>() {
-            {
-                put(1, obstacle1);
-                put(2, obstacle2);
-                put(3, obstacle3);
-                put(4, obstacle4);
-                put(5, obstacle5);
-                put(6, obstacle6);
-                put(7, obstacle7);
-                put(8, obstacle8);
-            }
-        };
+        obstacles = new HashMap<Integer, ImageView>() {{
+            put(1, obstacle1);
+            put(2, obstacle2);
+            put(3, obstacle3);
+            put(4, obstacle4);
+            put(5, obstacle5);
+            put(6, obstacle6);
+            put(7, obstacle7);
+            put(8, obstacle8);
+        }};
 
-        obstacle1.setOnClickListener(view -> {
-            obstacle1.setRotation((obstacle1.getRotation() + 90) % 360);
-            int orientation = (int) obstacle1.getRotation();
-            switch (((orientation / 90) % 4 + 4) % 4) {
-                case 0:
-                    obstacle1.setImageResource(Helper.resources.get("o1n"));
-                    break;
-                case 1:
-                    obstacle1.setImageResource(Helper.resources.get("o1e"));
-                    break;
-                case 2:
-                    obstacle1.setImageResource(Helper.resources.get("o1s"));
-                    break;
-                case 3:
-                    obstacle1.setImageResource(Helper.resources.get("o1w"));
-                    break;
-            }
-        });
+        setupObstacleRotation(obstacle1, "o1");
+        setupObstacleRotation(obstacle2, "o2");
+        setupObstacleRotation(obstacle3, "o3");
+        setupObstacleRotation(obstacle4, "o4");
+        setupObstacleRotation(obstacle5, "o5");
+        setupObstacleRotation(obstacle6, "o6");
+        setupObstacleRotation(obstacle7, "o7");
+        setupObstacleRotation(obstacle8, "o8");
 
-        obstacle2.setOnClickListener(view -> {
-            obstacle2.setRotation((obstacle2.getRotation() + 90) % 360);
-            int orientation = (int) obstacle2.getRotation();
-            switch (((orientation / 90) % 4 + 4) % 4) {
-                case 0:
-                    obstacle2.setImageResource(Helper.resources.get("o2n"));
-                    break;
-                case 1:
-                    obstacle2.setImageResource(Helper.resources.get("o2e"));
-                    break;
-                case 2:
-                    obstacle2.setImageResource(Helper.resources.get("o2s"));
-                    break;
-                case 3:
-                    obstacle2.setImageResource(Helper.resources.get("o2w"));
-                    break;
-            }
-        });
+        setOnTouchListenerForObstacle(obstacle1, "obstacle1");
+        setOnTouchListenerForObstacle(obstacle2, "obstacle2");
+        setOnTouchListenerForObstacle(obstacle3, "obstacle3");
+        setOnTouchListenerForObstacle(obstacle4, "obstacle4");
+        setOnTouchListenerForObstacle(obstacle5, "obstacle5");
+        setOnTouchListenerForObstacle(obstacle6, "obstacle6");
+        setOnTouchListenerForObstacle(obstacle7, "obstacle7");
+        setOnTouchListenerForObstacle(obstacle8, "obstacle8");
+    }
 
-        obstacle3.setOnClickListener(view -> {
-            obstacle3.setRotation((obstacle3.getRotation() + 90) % 360);
-            int orientation = (int) obstacle3.getRotation();
-            switch (((orientation / 90) % 4 + 4) % 4) {
-                case 0:
-                    obstacle3.setImageResource(Helper.resources.get("o3n"));
-                    break;
-                case 1:
-                    obstacle3.setImageResource(Helper.resources.get("o3e"));
-                    break;
-                case 2:
-                    obstacle3.setImageResource(Helper.resources.get("o3s"));
-                    break;
-                case 3:
-                    obstacle3.setImageResource(Helper.resources.get("o3w"));
-                    break;
-            }
-        });
-
-        obstacle4.setOnClickListener(view -> {
-            obstacle4.setRotation((obstacle4.getRotation() + 90) % 360);
-            int orientation = (int) obstacle4.getRotation();
-            switch (((orientation / 90) % 4 + 4) % 4) {
-                case 0:
-                    obstacle4.setImageResource(Helper.resources.get("o4n"));
-                    break;
-                case 1:
-                    obstacle4.setImageResource(Helper.resources.get("o4e"));
-                    break;
-                case 2:
-                    obstacle4.setImageResource(Helper.resources.get("o4s"));
-                    break;
-                case 3:
-                    obstacle4.setImageResource(Helper.resources.get("o4w"));
-                    break;
-            }
-        });
-
-        obstacle5.setOnClickListener(view -> {
-            obstacle5.setRotation((obstacle5.getRotation() + 90) % 360);
-            int orientation = (int) obstacle5.getRotation();
-            switch (((orientation / 90) % 4 + 4) % 4) {
-                case 0:
-                    obstacle5.setImageResource(Helper.resources.get("o5n"));
-                    break;
-                case 1:
-                    obstacle5.setImageResource(Helper.resources.get("o5e"));
-                    break;
-                case 2:
-                    obstacle5.setImageResource(Helper.resources.get("o5s"));
-                    break;
-                case 3:
-                    obstacle5.setImageResource(Helper.resources.get("o5w"));
-                    break;
-            }
-        });
-
-        obstacle6.setOnClickListener(view -> {
-            obstacle6.setRotation((obstacle6.getRotation() + 90) % 360);
-            int orientation = (int) obstacle6.getRotation();
-            switch (((orientation / 90) % 4 + 4) % 4) {
-                case 0:
-                    obstacle6.setImageResource(Helper.resources.get("o6n"));
-                    break;
-                case 1:
-                    obstacle6.setImageResource(Helper.resources.get("o6e"));
-                    break;
-                case 2:
-                    obstacle6.setImageResource(Helper.resources.get("o6s"));
-                    break;
-                case 3:
-                    obstacle6.setImageResource(Helper.resources.get("o6w"));
-                    break;
-            }
-        });
-
-        obstacle7.setOnClickListener(view -> {
-            obstacle7.setRotation((obstacle7.getRotation() + 90) % 360);
-            int orientation = (int) obstacle7.getRotation();
-            switch (((orientation / 90) % 4 + 4) % 4) {
-                case 0:
-                    obstacle7.setImageResource(Helper.resources.get("o7n"));
-                    break;
-                case 1:
-                    obstacle7.setImageResource(Helper.resources.get("o7e"));
-                    break;
-                case 2:
-                    obstacle7.setImageResource(Helper.resources.get("o7s"));
-                    break;
-                case 3:
-                    obstacle7.setImageResource(Helper.resources.get("o7w"));
-                    break;
-            }
-        });
-
-        obstacle8.setOnClickListener(view -> {
-            obstacle8.setRotation((obstacle8.getRotation() + 90) % 360);
-            int orientation = (int) obstacle8.getRotation();
-            switch (((orientation / 90) % 4 + 4) % 4) {
-                case 0:
-                    obstacle8.setImageResource(Helper.resources.get("o8n"));
-                    break;
-                case 1:
-                    obstacle8.setImageResource(Helper.resources.get("o8e"));
-                    break;
-                case 2:
-                    obstacle8.setImageResource(Helper.resources.get("o8s"));
-                    break;
-                case 3:
-                    obstacle8.setImageResource(Helper.resources.get("o8w"));
-                    break;
-            }
-        });
-
-        obstacle1.setOnTouchListener(new View.OnTouchListener() {
-            int lastX = 0;
-            int lastY = 0;
-            float dX = 0;
-            float dY = 0;
-            int orientation;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!cansetobstacles) {
-                    return false;
-                }
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Save the initial touch coordinates and rotation
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        orientation = (int) obstacle1.getRotation();
-                        obstacle1.setRotation(0);
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        // Calculate the change in coordinates
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        dX = x - lastX;
-                        dY = y - lastY;
-
-                        // Calculate new position
-                        float newX = obstacle1.getX() + dX;
-                        float newY = obstacle1.getY() + dY;
-
-                        // Get the dimensions of the obstacle
-                        int obstacleWidth = obstacle1.getWidth();
-                        int obstacleHeight = obstacle1.getHeight();
-
-                        // Define the grid boundary in pixels
-                        int gridWidth = 23 * 35; // 700 pixels
-                        int gridHeight = 20 * 35; // 700 pixels
-
-                        // Ensure the obstacle stays within bounds
-                        if (newX < 0) {
-                            newX = 0;
-                        } else if (newX + obstacleWidth > gridWidth) {
-                            newX = gridWidth - obstacleWidth;
-                        }
-
-                        if (newY < 0) {
-                            newY = 0;
-                        } else if (newY + obstacleHeight > gridHeight) {
-                            newY = gridHeight - obstacleHeight;
-                        }
-
-                        // Apply the new position
-                        obstacle1.setX(newX);
-                        obstacle1.setY(newY);
-
-                        // Update the last touch coordinates
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        // Snap to grid
-                        int snapToX = ((int) ((obstacle1.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle1.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        Log.d(TAG, "obstacle1 is at " + snapToX + "," + snapToY);
-                        obstacle1.setX(snapToX);
-                        obstacle1.setY(snapToY);
-                        obstacle1.setRotation(orientation % 360);
-                        break;
-
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-
-
-        obstacle2.setOnTouchListener(new View.OnTouchListener() {
-            int lastX = 0;
-            int lastY = 0;
-            float dX = 0;
-            float dY = 0;
-            int orientation;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!cansetobstacles) {
-                    return false;
-                }
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        // Save the initial touch coordinates and rotation
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        orientation = (int) obstacle2.getRotation();
-                        obstacle2.setRotation(0);
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        // Calculate the change in coordinates
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        dX = x - lastX;
-                        dY = y - lastY;
-
-                        // Calculate new position
-                        float newX = obstacle2.getX() + dX;
-                        float newY = obstacle2.getY() + dY;
-
-                        // Get the dimensions of the obstacle
-                        int obstacleWidth = obstacle2.getWidth();
-                        int obstacleHeight = obstacle2.getHeight();
-
-                        // Define the grid boundary in pixels
-                        int gridWidth = 23 * 35; // 700 pixels
-                        int gridHeight = 20 * 35; // 700 pixels
-
-                        // Ensure the obstacle stays within bounds
-                        if (newX < 0) {
-                            newX = 0;
-                        } else if (newX + obstacleWidth > gridWidth) {
-                            newX = gridWidth - obstacleWidth;
-                        }
-
-                        if (newY < 0) {
-                            newY = 0;
-                        } else if (newY + obstacleHeight > gridHeight) {
-                            newY = gridHeight - obstacleHeight;
-                        }
-
-                        // Apply the new position
-                        obstacle2.setX(newX);
-                        obstacle2.setY(newY);
-
-                        // Update the last touch coordinates
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        // Snap to grid
-                        int snapToX = ((int) ((obstacle2.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle2.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        Log.d(TAG, "obstacle2 is at " + snapToX + "," + snapToY);
-                        obstacle2.setX(snapToX);
-                        obstacle2.setY(snapToY);
-                        obstacle2.setRotation(orientation % 360);
-                        break;
-
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-
-
-        obstacle3.setOnTouchListener(new View.OnTouchListener() {
+    @SuppressLint("ClickableViewAccessibility")
+    private void setOnTouchListenerForObstacle(ImageView obstacle, String obstacleName) {
+        obstacle.setOnTouchListener(new View.OnTouchListener() {
             int lastX = 0;
             int lastY = 0;
             float dX = 0;
@@ -529,51 +241,16 @@ public class Arena extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN:
                         lastX = (int) event.getRawX();
                         lastY = (int) event.getRawY();
-                        orientation = (int) obstacle3.getRotation();
-                        obstacle3.setRotation(0);
+                        orientation = (int) obstacle.getRotation();
+                        obstacle.setRotation(0);
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        dX = x - lastX;
-                        dY = y - lastY;
-
-                        float newX = obstacle3.getX() + dX;
-                        float newY = obstacle3.getY() + dY;
-
-                        int obstacleWidth = obstacle3.getWidth();
-                        int obstacleHeight = obstacle3.getHeight();
-
-                        int gridWidth = 23 * 35; // 700 pixels
-                        int gridHeight = 20 * 35; // 700 pixels
-
-                        if (newX < 0) {
-                            newX = 0;
-                        } else if (newX + obstacleWidth > gridWidth) {
-                            newX = gridWidth - obstacleWidth;
-                        }
-
-                        if (newY < 0) {
-                            newY = 0;
-                        } else if (newY + obstacleHeight > gridHeight) {
-                            newY = gridHeight - obstacleHeight;
-                        }
-
-                        obstacle3.setX(newX);
-                        obstacle3.setY(newY);
-
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
+                        handleMove(obstacle, event);
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle3.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle3.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        Log.d(TAG, "obstacle3 is at " + snapToX + "," + snapToY);
-                        obstacle3.setX(snapToX);
-                        obstacle3.setY(snapToY);
-                        obstacle3.setRotation(orientation % 360);
+                        handleSnapToGrid(obstacle, obstacleName, orientation);
                         break;
 
                     default:
@@ -581,366 +258,64 @@ public class Arena extends AppCompatActivity {
                 }
                 return true;
             }
-        });
 
-        obstacle4.setOnTouchListener(new View.OnTouchListener() {
-            int lastX = 0;
-            int lastY = 0;
-            float dX = 0;
-            float dY = 0;
-            int orientation;
+            private void handleMove(ImageView obstacle, MotionEvent event) {
+                float x = event.getRawX();
+                float y = event.getRawY();
+                dX = x - lastX;
+                dY = y - lastY;
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!cansetobstacles) {
-                    return false;
-                }
+                float newX = obstacle.getX() + dX;
+                float newY = obstacle.getY() + dY;
 
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        orientation = (int) obstacle4.getRotation();
-                        obstacle4.setRotation(0);
-                        break;
+                int obstacleWidth = obstacle.getWidth();
+                int obstacleHeight = obstacle.getHeight();
 
-                    case MotionEvent.ACTION_MOVE:
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        dX = x - lastX;
-                        dY = y - lastY;
+                int gridWidth = 23 * 35; // 700 pixels
+                int gridHeight = 20 * 35; // 700 pixels
 
-                        float newX = obstacle4.getX() + dX;
-                        float newY = obstacle4.getY() + dY;
+                newX = Math.max(0, Math.min(newX, gridWidth - obstacleWidth));
+                newY = Math.max(0, Math.min(newY, gridHeight - obstacleHeight));
 
-                        int obstacleWidth = obstacle4.getWidth();
-                        int obstacleHeight = obstacle4.getHeight();
+                obstacle.setX(newX);
+                obstacle.setY(newY);
 
-                        int gridWidth = 23 * 35; // 700 pixels
-                        int gridHeight = 20 * 35; // 700 pixels
-
-                        if (newX < 0) {
-                            newX = 0;
-                        } else if (newX + obstacleWidth > gridWidth) {
-                            newX = gridWidth - obstacleWidth;
-                        }
-
-                        if (newY < 0) {
-                            newY = 0;
-                        } else if (newY + obstacleHeight > gridHeight) {
-                            newY = gridHeight - obstacleHeight;
-                        }
-
-                        obstacle4.setX(newX);
-                        obstacle4.setY(newY);
-
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle4.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle4.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        Log.d(TAG, "obstacle4 is at " + snapToX + "," + snapToY);
-                        obstacle4.setX(snapToX);
-                        obstacle4.setY(snapToY);
-                        obstacle4.setRotation(orientation % 360);
-                        break;
-
-                    default:
-                        break;
-                }
-                return true;
+                lastX = (int) event.getRawX();
+                lastY = (int) event.getRawY();
             }
-        });
 
-        obstacle5.setOnTouchListener(new View.OnTouchListener() {
-            int lastX = 0;
-            int lastY = 0;
-            float dX = 0;
-            float dY = 0;
-            int orientation;
+            private void handleSnapToGrid(ImageView obstacle, String obstacleName, int orientation) {
+                int snapToX = ((int) ((obstacle.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                int snapToY = ((int) ((obstacle.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                Log.d(TAG, obstacleName + " is at " + snapToX + "," + snapToY);
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!cansetobstacles) {
-                    return false;
+                //amu: send to rpi obstacle location after snap to grid in the format
+                //STM:ADD,3,16,15,N         |         STM:ADD,<obstacleID>,<x>,<y>,<direction>
+                //STM:SUB 3                 |         STM:SUB <obstacleID>
+
+                if(BluetoothService.BluetoothConnectionStatus){
+                    if(getObstacleString(obstacle).isEmpty()){
+                        String btRemoveObstacleMsg = "STM:SUB," + obstacleName.replace("obstacle", "");
+                        BluetoothService.write(btRemoveObstacleMsg.getBytes(StandardCharsets.UTF_8));
+                    }else{
+                        String btSnapToGridMessage = "STM:ADD,"+obstacleName.replace("obstacle", "") + "," + getObstacleString(obstacle);
+                        btSnapToGridMessage = btSnapToGridMessage.substring(0, btSnapToGridMessage.length() - 1);
+                        BluetoothService.write(btSnapToGridMessage.getBytes(StandardCharsets.UTF_8));
+                    }
+
+
+                }else {
+                    Log.d(TAG, "Bluetooth not connected");
                 }
 
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        orientation = (int) obstacle5.getRotation();
-                        obstacle5.setRotation(0);
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        dX = x - lastX;
-                        dY = y - lastY;
-
-                        float newX = obstacle5.getX() + dX;
-                        float newY = obstacle5.getY() + dY;
-
-                        int obstacleWidth = obstacle5.getWidth();
-                        int obstacleHeight = obstacle5.getHeight();
-
-                        int gridWidth = 23 * 35; // 700 pixels
-                        int gridHeight = 20 * 35; // 700 pixels
-
-                        if (newX < 0) {
-                            newX = 0;
-                        } else if (newX + obstacleWidth > gridWidth) {
-                            newX = gridWidth - obstacleWidth;
-                        }
-
-                        if (newY < 0) {
-                            newY = 0;
-                        } else if (newY + obstacleHeight > gridHeight) {
-                            newY = gridHeight - obstacleHeight;
-                        }
-
-                        obstacle5.setX(newX);
-                        obstacle5.setY(newY);
-
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle5.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle5.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        Log.d(TAG, "obstacle5 is at " + snapToX + "," + snapToY);
-                        obstacle5.setX(snapToX);
-                        obstacle5.setY(snapToY);
-                        obstacle5.setRotation(orientation % 360);
-                        break;
-
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-
-        obstacle6.setOnTouchListener(new View.OnTouchListener() {
-            int lastX = 0;
-            int lastY = 0;
-            float dX = 0;
-            float dY = 0;
-            int orientation;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!cansetobstacles) {
-                    return false;
-                }
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        orientation = (int) obstacle6.getRotation();
-                        obstacle6.setRotation(0);
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        dX = x - lastX;
-                        dY = y - lastY;
-
-                        float newX = obstacle6.getX() + dX;
-                        float newY = obstacle6.getY() + dY;
-
-                        int obstacleWidth = obstacle6.getWidth();
-                        int obstacleHeight = obstacle6.getHeight();
-
-                        int gridWidth = 23 * 35; // 700 pixels
-                        int gridHeight = 20 * 35; // 700 pixels
-
-                        if (newX < 0) {
-                            newX = 0;
-                        } else if (newX + obstacleWidth > gridWidth) {
-                            newX = gridWidth - obstacleWidth;
-                        }
-
-                        if (newY < 0) {
-                            newY = 0;
-                        } else if (newY + obstacleHeight > gridHeight) {
-                            newY = gridHeight - obstacleHeight;
-                        }
-
-                        obstacle6.setX(newX);
-                        obstacle6.setY(newY);
-
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle6.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle6.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        Log.d(TAG, "obstacle6 is at " + snapToX + "," + snapToY);
-                        obstacle6.setX(snapToX);
-                        obstacle6.setY(snapToY);
-                        obstacle6.setRotation(orientation % 360);
-                        break;
-
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-
-        obstacle7.setOnTouchListener(new View.OnTouchListener() {
-            int lastX = 0;
-            int lastY = 0;
-            float dX = 0;
-            float dY = 0;
-            int orientation;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!cansetobstacles) {
-                    return false;
-                }
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        orientation = (int) obstacle7.getRotation();
-                        obstacle7.setRotation(0);
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        dX = x - lastX;
-                        dY = y - lastY;
-
-                        float newX = obstacle7.getX() + dX;
-                        float newY = obstacle7.getY() + dY;
-
-                        int obstacleWidth = obstacle7.getWidth();
-                        int obstacleHeight = obstacle7.getHeight();
-
-                        int gridWidth = 23 * 35; // 700 pixels
-                        int gridHeight = 20 * 35; // 700 pixels
-
-                        if (newX < 0) {
-                            newX = 0;
-                        } else if (newX + obstacleWidth > gridWidth) {
-                            newX = gridWidth - obstacleWidth;
-                        }
-
-                        if (newY < 0) {
-                            newY = 0;
-                        } else if (newY + obstacleHeight > gridHeight) {
-                            newY = gridHeight - obstacleHeight;
-                        }
-
-                        obstacle7.setX(newX);
-                        obstacle7.setY(newY);
-
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle7.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle7.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        Log.d(TAG, "obstacle7 is at " + snapToX + "," + snapToY);
-                        obstacle7.setX(snapToX);
-                        obstacle7.setY(snapToY);
-                        obstacle7.setRotation(orientation % 360);
-                        break;
-
-                    default:
-                        break;
-                }
-                return true;
-            }
-        });
-
-
-        obstacle8.setOnTouchListener(new View.OnTouchListener() {
-            int lastX = 0;
-            int lastY = 0;
-            float dX = 0;
-            float dY = 0;
-            int orientation;
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (!cansetobstacles) {
-                    return false;
-                }
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        orientation = (int) obstacle8.getRotation();
-                        obstacle8.setRotation(0);
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
-                        float x = event.getRawX();
-                        float y = event.getRawY();
-                        dX = x - lastX;
-                        dY = y - lastY;
-
-                        float newX = obstacle8.getX() + dX;
-                        float newY = obstacle8.getY() + dY;
-
-                        int obstacleWidth = obstacle8.getWidth();
-                        int obstacleHeight = obstacle8.getHeight();
-
-                        int gridWidth = 23 * 35; // 700 pixels
-                        int gridHeight = 20 * 35; // 700 pixels
-
-                        if (newX < 0) {
-                            newX = 0;
-                        } else if (newX + obstacleWidth > gridWidth) {
-                            newX = gridWidth - obstacleWidth;
-                        }
-
-                        if (newY < 0) {
-                            newY = 0;
-                        } else if (newY + obstacleHeight > gridHeight) {
-                            newY = gridHeight - obstacleHeight;
-                        }
-
-                        obstacle8.setX(newX);
-                        obstacle8.setY(newY);
-
-                        lastX = (int) event.getRawX();
-                        lastY = (int) event.getRawY();
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle8.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle8.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
-                        Log.d(TAG, "obstacle8 is at " + snapToX + "," + snapToY);
-                        obstacle8.setX(snapToX);
-                        obstacle8.setY(snapToY);
-                        obstacle8.setRotation(orientation % 360);
-                        break;
-
-                    default:
-                        break;
-                }
-                return true;
+                obstacle.setX(snapToX);
+                obstacle.setY(snapToY);
+                obstacle.setRotation(orientation % 360);
             }
         });
     }
 
-    /*
+        /*
      * Set obstacle ID images
      */
     private void setObstacleImageID(int obstacleNumber, String image) {
@@ -2273,211 +1648,8 @@ public class Arena extends AppCompatActivity {
         Toast.makeText(Arena.this, "Preset 1 Applied", Toast.LENGTH_SHORT).show();
     }
 
-    /*
-     * TODO: Figure out what I want to do with this shit
-     */
-    public String[][] savedPreset = {};
 
-    private void setPreset2Button() {
-        if (savedPreset.length == 0) {
-            Toast.makeText(this, "No saved preset found", Toast.LENGTH_SHORT).show();
-        } else {
-            String[] obstacle1data = savedPreset[0];
-            obstacle1.setX(Integer.parseInt(obstacle1data[0]));
-            obstacle1.setY(Integer.parseInt(obstacle1data[1]));
-            Log.d(TAG, "Obstacle1 should be at " + obstacle1data[0] + "," + obstacle1data[1]);
-            switch (obstacle1data[2]) {
-                case ("N"):
-                    obstacle1.setRotation(0);
-                    obstacle1.setImageResource(Helper.resources.get("o1n"));
-                    break;
-                case ("E"):
-                    obstacle1.setRotation(90);
-                    obstacle1.setImageResource(Helper.resources.get("o1e"));
-                    break;
-                case ("S"):
-                    obstacle1.setRotation(180);
-                    obstacle1.setImageResource(Helper.resources.get("o1s"));
-                    break;
-                case ("W"):
-                    obstacle1.setRotation(270);
-                    obstacle1.setImageResource(Helper.resources.get("o1w"));
-                    break;
-                default:
-                    break;
-            }
-            String[] obstacle2data = savedPreset[1];
-            obstacle2.setX(Integer.parseInt(obstacle2data[0]));
-            obstacle2.setY(Integer.parseInt(obstacle2data[1]));
-            Log.d(TAG, "obstacle2 should be at " + obstacle2data[0] + "," + obstacle2data[1]);
-            switch (obstacle2data[2]) {
-                case ("N"):
-                    obstacle2.setRotation(0);
-                    obstacle2.setImageResource(Helper.resources.get("o2n"));
-                    break;
-                case ("E"):
-                    obstacle2.setRotation(90);
-                    obstacle2.setImageResource(Helper.resources.get("o2e"));
-                    break;
-                case ("S"):
-                    obstacle2.setRotation(180);
-                    obstacle2.setImageResource(Helper.resources.get("o2s"));
-                    break;
-                case ("W"):
-                    obstacle2.setRotation(270);
-                    obstacle2.setImageResource(Helper.resources.get("o2w"));
-                    break;
-                default:
-                    break;
-            }
-            String[] obstacle3data = savedPreset[2];
-            obstacle3.setX(Integer.parseInt(obstacle3data[0]));
-            obstacle3.setY(Integer.parseInt(obstacle3data[1]));
-            Log.d(TAG, "obstacle3 should be at " + obstacle3data[0] + "," + obstacle3data[1]);
-            switch (obstacle3data[2]) {
-                case ("N"):
-                    obstacle3.setRotation(0);
-                    obstacle3.setImageResource(Helper.resources.get("o3n"));
-                    break;
-                case ("E"):
-                    obstacle3.setRotation(90);
-                    obstacle3.setImageResource(Helper.resources.get("o3e"));
-                    break;
-                case ("S"):
-                    obstacle3.setRotation(180);
-                    obstacle3.setImageResource(Helper.resources.get("o3s"));
-                    break;
-                case ("W"):
-                    obstacle3.setRotation(270);
-                    obstacle3.setImageResource(Helper.resources.get("o3w"));
-                    break;
-                default:
-                    break;
-            }
-            String[] obstacle4data = savedPreset[3];
-            obstacle4.setX(Integer.parseInt(obstacle4data[0]));
-            obstacle4.setY(Integer.parseInt(obstacle4data[1]));
-            Log.d(TAG, "obstacle4 should be at " + obstacle4data[0] + "," + obstacle4data[1]);
-            switch (obstacle4data[2]) {
-                case ("N"):
-                    obstacle4.setRotation(0);
-                    obstacle4.setImageResource(Helper.resources.get("o4n"));
-                    break;
-                case ("E"):
-                    obstacle4.setRotation(90);
-                    obstacle4.setImageResource(Helper.resources.get("o4e"));
-                    break;
-                case ("S"):
-                    obstacle4.setRotation(180);
-                    obstacle4.setImageResource(Helper.resources.get("o4s"));
-                    break;
-                case ("W"):
-                    obstacle4.setRotation(270);
-                    obstacle4.setImageResource(Helper.resources.get("o4w"));
-                    break;
-                default:
-                    break;
-            }
-            String[] obstacle5data = savedPreset[4];
-            obstacle5.setX(Integer.parseInt(obstacle5data[0]));
-            obstacle5.setY(Integer.parseInt(obstacle5data[1]));
-            Log.d(TAG, "obstacle5 should be at " + obstacle5data[0] + "," + obstacle5data[1]);
-            switch (obstacle5data[2]) {
-                case ("N"):
-                    obstacle5.setRotation(0);
-                    obstacle5.setImageResource(Helper.resources.get("o5n"));
-                    break;
-                case ("E"):
-                    obstacle5.setRotation(90);
-                    obstacle5.setImageResource(Helper.resources.get("o5e"));
-                    break;
-                case ("S"):
-                    obstacle5.setRotation(180);
-                    obstacle5.setImageResource(Helper.resources.get("o5s"));
-                    break;
-                case ("W"):
-                    obstacle5.setRotation(270);
-                    obstacle5.setImageResource(Helper.resources.get("o5w"));
-                    break;
-                default:
-                    break;
-            }
-            String[] obstacle6data = savedPreset[5];
-            obstacle6.setX(Integer.parseInt(obstacle6data[0]));
-            obstacle6.setY(Integer.parseInt(obstacle6data[1]));
-            Log.d(TAG, "obstacle6 should be at " + obstacle6data[0] + "," + obstacle6data[1]);
-            switch (obstacle6data[2]) {
-                case ("N"):
-                    obstacle6.setRotation(0);
-                    obstacle6.setImageResource(Helper.resources.get("o6n"));
-                    break;
-                case ("E"):
-                    obstacle6.setRotation(90);
-                    obstacle6.setImageResource(Helper.resources.get("o6e"));
-                    break;
-                case ("S"):
-                    obstacle6.setRotation(180);
-                    obstacle6.setImageResource(Helper.resources.get("o6s"));
-                    break;
-                case ("W"):
-                    obstacle6.setRotation(270);
-                    obstacle6.setImageResource(Helper.resources.get("o6w"));
-                    break;
-                default:
-                    break;
-            }
-            String[] obstacle7data = savedPreset[6];
-            obstacle7.setX(Integer.parseInt(obstacle7data[0]));
-            obstacle7.setY(Integer.parseInt(obstacle7data[1]));
-            Log.d(TAG, "obstacle7 should be at " + obstacle7data[0] + "," + obstacle7data[1]);
-            switch (obstacle7data[2]) {
-                case ("N"):
-                    obstacle7.setRotation(0);
-                    obstacle7.setImageResource(Helper.resources.get("o7n"));
-                    break;
-                case ("E"):
-                    obstacle7.setRotation(90);
-                    obstacle7.setImageResource(Helper.resources.get("o7e"));
-                    break;
-                case ("S"):
-                    obstacle7.setRotation(180);
-                    obstacle7.setImageResource(Helper.resources.get("o7s"));
-                    break;
-                case ("W"):
-                    obstacle7.setRotation(270);
-                    obstacle7.setImageResource(Helper.resources.get("o7w"));
-                    break;
-                default:
-                    break;
-            }
-            String[] obstacle8data = savedPreset[7];
-            obstacle8.setX(Integer.parseInt(obstacle8data[0]));
-            obstacle8.setY(Integer.parseInt(obstacle8data[1]));
-            Log.d(TAG, "obstacle8 should be at " + obstacle8data[0] + "," + obstacle8data[1]);
-            switch (obstacle8data[2]) {
-                case ("N"):
-                    obstacle8.setRotation(0);
-                    obstacle8.setImageResource(Helper.resources.get("o8n"));
-                    break;
-                case ("E"):
-                    obstacle8.setRotation(90);
-                    obstacle8.setImageResource(Helper.resources.get("o8e"));
-                    break;
-                case ("S"):
-                    obstacle8.setRotation(180);
-                    obstacle8.setImageResource(Helper.resources.get("o8s"));
-                    break;
-                case ("W"):
-                    obstacle8.setRotation(270);
-                    obstacle8.setImageResource(Helper.resources.get("o8w"));
-                    break;
-                default:
-                    break;
-            }
 
-            Toast.makeText(this, "Preset 2 Applied", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void toggleSetMode() {
         cansetobstacles = !cansetobstacles;
@@ -2527,6 +1699,32 @@ public class Arena extends AppCompatActivity {
             }
         }
     }
+// amu: improved code eff with this func, for the rotation of the obj
+    private void setupObstacleRotation(ImageView obstacle, String obstacleKey) {
+        obstacle.setOnClickListener(view -> {
+            obstacle.setRotation((obstacle.getRotation() + 90) % 360);
+            int orientation = (int) obstacle.getRotation();
+            String direction;
+
+            switch (((orientation / 90) % 4 + 4) % 4) {
+                case 0: direction = "n"; break;
+                case 1: direction = "e"; break;
+                case 2: direction = "s"; break;
+                case 3: direction = "w"; break;
+                default: return;
+            }
+            //amu
+            //STM:ADD,3,16,15,N         |         STM:ADD,<obstacleID>,<x>,<y>,<direction>
+            obstacle.setImageResource(Helper.resources.get(obstacleKey + direction));
+            Snackbar.make(view, "Object "+ obstacleKey.replace("o","")+ " Rotated to " + direction, Snackbar.LENGTH_SHORT).show();
+            String btMessageRotatedObstacle = "STM:ADD,"+ obstacleKey.replace("o","") +"," + getObstacleString(obstacle);
+            btMessageRotatedObstacle = btMessageRotatedObstacle.substring(0, btMessageRotatedObstacle.length() - 1);
+
+            BluetoothService.write(btMessageRotatedObstacle.getBytes());
+
+        });
+    }
+
 
     private void sendObstacles() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -2744,7 +1942,10 @@ public class Arena extends AppCompatActivity {
                                 break;
                         }
 
-                         updateRobotPosition(Integer.parseInt(x), Integer.parseInt(y), direction_int);
+                        //THIS is the inverted grid, meaning x axis is inverted
+                        updateRobotPosition(Integer.parseInt(x), Integer.parseInt(y), direction_int);
+
+                        //this grid is the normal grid, as in the x and y axis makes sense
                         //updateRobotPosition(Integer.parseInt(x), adjusted_y, direction_int);
                         break;
 
