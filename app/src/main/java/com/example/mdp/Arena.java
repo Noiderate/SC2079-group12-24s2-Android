@@ -351,10 +351,10 @@ public class Arena extends AppCompatActivity {
         });
 
         obstacle1.setOnTouchListener(new View.OnTouchListener() {
-            int x = 0;
-            int y = 0;
-            int dx = 0;
-            int dy = 0;
+            int lastX = 0;
+            int lastY = 0;
+            float dX = 0;
+            float dY = 0;
             int orientation;
 
             @Override
@@ -362,30 +362,67 @@ public class Arena extends AppCompatActivity {
                 if (!cansetobstacles) {
                     return false;
                 }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x = (int) event.getX();
-                        y = (int) event.getY();
+                        // Save the initial touch coordinates and rotation
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         orientation = (int) obstacle1.getRotation();
                         obstacle1.setRotation(0);
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        dx = (int) event.getX() - x;
-                        dy = (int) event.getY() - y;
 
-                        obstacle1.setX(obstacle1.getX() + dx);
-                        obstacle1.setY(obstacle1.getY() + dy);
+                    case MotionEvent.ACTION_MOVE:
+                        // Calculate the change in coordinates
+                        float x = event.getRawX();
+                        float y = event.getRawY();
+                        dX = x - lastX;
+                        dY = y - lastY;
+
+                        // Calculate new position
+                        float newX = obstacle1.getX() + dX;
+                        float newY = obstacle1.getY() + dY;
+
+                        // Get the dimensions of the obstacle
+                        int obstacleWidth = obstacle1.getWidth();
+                        int obstacleHeight = obstacle1.getHeight();
+
+                        // Define the grid boundary in pixels
+                        int gridWidth = 23 * 35; // 700 pixels
+                        int gridHeight = 20 * 35; // 700 pixels
+
+                        // Ensure the obstacle stays within bounds
+                        if (newX < 0) {
+                            newX = 0;
+                        } else if (newX + obstacleWidth > gridWidth) {
+                            newX = gridWidth - obstacleWidth;
+                        }
+
+                        if (newY < 0) {
+                            newY = 0;
+                        } else if (newY + obstacleHeight > gridHeight) {
+                            newY = gridHeight - obstacleHeight;
+                        }
+
+                        // Apply the new position
+                        obstacle1.setX(newX);
+                        obstacle1.setY(newY);
+
+                        // Update the last touch coordinates
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle1.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle1.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
+                        // Snap to grid
+                        int snapToX = ((int) ((obstacle1.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        int snapToY = ((int) ((obstacle1.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
                         Log.d(TAG, "obstacle1 is at " + snapToX + "," + snapToY);
                         obstacle1.setX(snapToX);
                         obstacle1.setY(snapToY);
                         obstacle1.setRotation(orientation % 360);
                         break;
+
                     default:
                         break;
                 }
@@ -393,11 +430,12 @@ public class Arena extends AppCompatActivity {
             }
         });
 
+
         obstacle2.setOnTouchListener(new View.OnTouchListener() {
-            int x = 0;
-            int y = 0;
-            int dx = 0;
-            int dy = 0;
+            int lastX = 0;
+            int lastY = 0;
+            float dX = 0;
+            float dY = 0;
             int orientation;
 
             @Override
@@ -405,30 +443,67 @@ public class Arena extends AppCompatActivity {
                 if (!cansetobstacles) {
                     return false;
                 }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x = (int) event.getX();
-                        y = (int) event.getY();
+                        // Save the initial touch coordinates and rotation
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         orientation = (int) obstacle2.getRotation();
                         obstacle2.setRotation(0);
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        dx = (int) event.getX() - x;
-                        dy = (int) event.getY() - y;
 
-                        obstacle2.setX(obstacle2.getX() + dx);
-                        obstacle2.setY(obstacle2.getY() + dy);
+                    case MotionEvent.ACTION_MOVE:
+                        // Calculate the change in coordinates
+                        float x = event.getRawX();
+                        float y = event.getRawY();
+                        dX = x - lastX;
+                        dY = y - lastY;
+
+                        // Calculate new position
+                        float newX = obstacle2.getX() + dX;
+                        float newY = obstacle2.getY() + dY;
+
+                        // Get the dimensions of the obstacle
+                        int obstacleWidth = obstacle2.getWidth();
+                        int obstacleHeight = obstacle2.getHeight();
+
+                        // Define the grid boundary in pixels
+                        int gridWidth = 23 * 35; // 700 pixels
+                        int gridHeight = 20 * 35; // 700 pixels
+
+                        // Ensure the obstacle stays within bounds
+                        if (newX < 0) {
+                            newX = 0;
+                        } else if (newX + obstacleWidth > gridWidth) {
+                            newX = gridWidth - obstacleWidth;
+                        }
+
+                        if (newY < 0) {
+                            newY = 0;
+                        } else if (newY + obstacleHeight > gridHeight) {
+                            newY = gridHeight - obstacleHeight;
+                        }
+
+                        // Apply the new position
+                        obstacle2.setX(newX);
+                        obstacle2.setY(newY);
+
+                        // Update the last touch coordinates
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle2.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle2.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        // Log.d(TAG, "obstacle2 is at " + snapToX + "," + snapToY);
+                        // Snap to grid
+                        int snapToX = ((int) ((obstacle2.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        int snapToY = ((int) ((obstacle2.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        Log.d(TAG, "obstacle2 is at " + snapToX + "," + snapToY);
                         obstacle2.setX(snapToX);
                         obstacle2.setY(snapToY);
                         obstacle2.setRotation(orientation % 360);
                         break;
+
                     default:
                         break;
                 }
@@ -436,11 +511,12 @@ public class Arena extends AppCompatActivity {
             }
         });
 
+
         obstacle3.setOnTouchListener(new View.OnTouchListener() {
-            int x = 0;
-            int y = 0;
-            int dx = 0;
-            int dy = 0;
+            int lastX = 0;
+            int lastY = 0;
+            float dX = 0;
+            float dY = 0;
             int orientation;
 
             @Override
@@ -448,30 +524,58 @@ public class Arena extends AppCompatActivity {
                 if (!cansetobstacles) {
                     return false;
                 }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x = (int) event.getX();
-                        y = (int) event.getY();
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         orientation = (int) obstacle3.getRotation();
                         obstacle3.setRotation(0);
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        dx = (int) event.getX() - x;
-                        dy = (int) event.getY() - y;
 
-                        obstacle3.setX(obstacle3.getX() + dx);
-                        obstacle3.setY(obstacle3.getY() + dy);
+                    case MotionEvent.ACTION_MOVE:
+                        float x = event.getRawX();
+                        float y = event.getRawY();
+                        dX = x - lastX;
+                        dY = y - lastY;
+
+                        float newX = obstacle3.getX() + dX;
+                        float newY = obstacle3.getY() + dY;
+
+                        int obstacleWidth = obstacle3.getWidth();
+                        int obstacleHeight = obstacle3.getHeight();
+
+                        int gridWidth = 23 * 35; // 700 pixels
+                        int gridHeight = 20 * 35; // 700 pixels
+
+                        if (newX < 0) {
+                            newX = 0;
+                        } else if (newX + obstacleWidth > gridWidth) {
+                            newX = gridWidth - obstacleWidth;
+                        }
+
+                        if (newY < 0) {
+                            newY = 0;
+                        } else if (newY + obstacleHeight > gridHeight) {
+                            newY = gridHeight - obstacleHeight;
+                        }
+
+                        obstacle3.setX(newX);
+                        obstacle3.setY(newY);
+
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle3.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle3.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        // Log.d(TAG, "obstacle3 is at " + snapToX + "," + snapToY);
+                        int snapToX = ((int) ((obstacle3.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        int snapToY = ((int) ((obstacle3.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        Log.d(TAG, "obstacle3 is at " + snapToX + "," + snapToY);
                         obstacle3.setX(snapToX);
                         obstacle3.setY(snapToY);
                         obstacle3.setRotation(orientation % 360);
                         break;
+
                     default:
                         break;
                 }
@@ -480,10 +584,10 @@ public class Arena extends AppCompatActivity {
         });
 
         obstacle4.setOnTouchListener(new View.OnTouchListener() {
-            int x = 0;
-            int y = 0;
-            int dx = 0;
-            int dy = 0;
+            int lastX = 0;
+            int lastY = 0;
+            float dX = 0;
+            float dY = 0;
             int orientation;
 
             @Override
@@ -491,30 +595,58 @@ public class Arena extends AppCompatActivity {
                 if (!cansetobstacles) {
                     return false;
                 }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x = (int) event.getX();
-                        y = (int) event.getY();
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         orientation = (int) obstacle4.getRotation();
                         obstacle4.setRotation(0);
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        dx = (int) event.getX() - x;
-                        dy = (int) event.getY() - y;
 
-                        obstacle4.setX(obstacle4.getX() + dx);
-                        obstacle4.setY(obstacle4.getY() + dy);
+                    case MotionEvent.ACTION_MOVE:
+                        float x = event.getRawX();
+                        float y = event.getRawY();
+                        dX = x - lastX;
+                        dY = y - lastY;
+
+                        float newX = obstacle4.getX() + dX;
+                        float newY = obstacle4.getY() + dY;
+
+                        int obstacleWidth = obstacle4.getWidth();
+                        int obstacleHeight = obstacle4.getHeight();
+
+                        int gridWidth = 23 * 35; // 700 pixels
+                        int gridHeight = 20 * 35; // 700 pixels
+
+                        if (newX < 0) {
+                            newX = 0;
+                        } else if (newX + obstacleWidth > gridWidth) {
+                            newX = gridWidth - obstacleWidth;
+                        }
+
+                        if (newY < 0) {
+                            newY = 0;
+                        } else if (newY + obstacleHeight > gridHeight) {
+                            newY = gridHeight - obstacleHeight;
+                        }
+
+                        obstacle4.setX(newX);
+                        obstacle4.setY(newY);
+
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle4.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle4.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        // Log.d(TAG, "obstacle4 is at " + snapToX + "," + snapToY);
+                        int snapToX = ((int) ((obstacle4.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        int snapToY = ((int) ((obstacle4.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        Log.d(TAG, "obstacle4 is at " + snapToX + "," + snapToY);
                         obstacle4.setX(snapToX);
                         obstacle4.setY(snapToY);
                         obstacle4.setRotation(orientation % 360);
                         break;
+
                     default:
                         break;
                 }
@@ -523,10 +655,10 @@ public class Arena extends AppCompatActivity {
         });
 
         obstacle5.setOnTouchListener(new View.OnTouchListener() {
-            int x = 0;
-            int y = 0;
-            int dx = 0;
-            int dy = 0;
+            int lastX = 0;
+            int lastY = 0;
+            float dX = 0;
+            float dY = 0;
             int orientation;
 
             @Override
@@ -534,30 +666,58 @@ public class Arena extends AppCompatActivity {
                 if (!cansetobstacles) {
                     return false;
                 }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x = (int) event.getX();
-                        y = (int) event.getY();
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         orientation = (int) obstacle5.getRotation();
                         obstacle5.setRotation(0);
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        dx = (int) event.getX() - x;
-                        dy = (int) event.getY() - y;
 
-                        obstacle5.setX(obstacle5.getX() + dx);
-                        obstacle5.setY(obstacle5.getY() + dy);
+                    case MotionEvent.ACTION_MOVE:
+                        float x = event.getRawX();
+                        float y = event.getRawY();
+                        dX = x - lastX;
+                        dY = y - lastY;
+
+                        float newX = obstacle5.getX() + dX;
+                        float newY = obstacle5.getY() + dY;
+
+                        int obstacleWidth = obstacle5.getWidth();
+                        int obstacleHeight = obstacle5.getHeight();
+
+                        int gridWidth = 23 * 35; // 700 pixels
+                        int gridHeight = 20 * 35; // 700 pixels
+
+                        if (newX < 0) {
+                            newX = 0;
+                        } else if (newX + obstacleWidth > gridWidth) {
+                            newX = gridWidth - obstacleWidth;
+                        }
+
+                        if (newY < 0) {
+                            newY = 0;
+                        } else if (newY + obstacleHeight > gridHeight) {
+                            newY = gridHeight - obstacleHeight;
+                        }
+
+                        obstacle5.setX(newX);
+                        obstacle5.setY(newY);
+
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle5.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle5.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        // Log.d(TAG, "obstacle5 is at " + snapToX + "," + snapToY);
+                        int snapToX = ((int) ((obstacle5.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        int snapToY = ((int) ((obstacle5.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        Log.d(TAG, "obstacle5 is at " + snapToX + "," + snapToY);
                         obstacle5.setX(snapToX);
                         obstacle5.setY(snapToY);
                         obstacle5.setRotation(orientation % 360);
                         break;
+
                     default:
                         break;
                 }
@@ -566,10 +726,10 @@ public class Arena extends AppCompatActivity {
         });
 
         obstacle6.setOnTouchListener(new View.OnTouchListener() {
-            int x = 0;
-            int y = 0;
-            int dx = 0;
-            int dy = 0;
+            int lastX = 0;
+            int lastY = 0;
+            float dX = 0;
+            float dY = 0;
             int orientation;
 
             @Override
@@ -577,30 +737,58 @@ public class Arena extends AppCompatActivity {
                 if (!cansetobstacles) {
                     return false;
                 }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x = (int) event.getX();
-                        y = (int) event.getY();
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         orientation = (int) obstacle6.getRotation();
                         obstacle6.setRotation(0);
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        dx = (int) event.getX() - x;
-                        dy = (int) event.getY() - y;
 
-                        obstacle6.setX(obstacle6.getX() + dx);
-                        obstacle6.setY(obstacle6.getY() + dy);
+                    case MotionEvent.ACTION_MOVE:
+                        float x = event.getRawX();
+                        float y = event.getRawY();
+                        dX = x - lastX;
+                        dY = y - lastY;
+
+                        float newX = obstacle6.getX() + dX;
+                        float newY = obstacle6.getY() + dY;
+
+                        int obstacleWidth = obstacle6.getWidth();
+                        int obstacleHeight = obstacle6.getHeight();
+
+                        int gridWidth = 23 * 35; // 700 pixels
+                        int gridHeight = 20 * 35; // 700 pixels
+
+                        if (newX < 0) {
+                            newX = 0;
+                        } else if (newX + obstacleWidth > gridWidth) {
+                            newX = gridWidth - obstacleWidth;
+                        }
+
+                        if (newY < 0) {
+                            newY = 0;
+                        } else if (newY + obstacleHeight > gridHeight) {
+                            newY = gridHeight - obstacleHeight;
+                        }
+
+                        obstacle6.setX(newX);
+                        obstacle6.setY(newY);
+
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle6.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle6.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        // Log.d(TAG, "obstacle6 is at " + snapToX + "," + snapToY);
+                        int snapToX = ((int) ((obstacle6.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        int snapToY = ((int) ((obstacle6.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        Log.d(TAG, "obstacle6 is at " + snapToX + "," + snapToY);
                         obstacle6.setX(snapToX);
                         obstacle6.setY(snapToY);
                         obstacle6.setRotation(orientation % 360);
                         break;
+
                     default:
                         break;
                 }
@@ -609,10 +797,10 @@ public class Arena extends AppCompatActivity {
         });
 
         obstacle7.setOnTouchListener(new View.OnTouchListener() {
-            int x = 0;
-            int y = 0;
-            int dx = 0;
-            int dy = 0;
+            int lastX = 0;
+            int lastY = 0;
+            float dX = 0;
+            float dY = 0;
             int orientation;
 
             @Override
@@ -620,30 +808,58 @@ public class Arena extends AppCompatActivity {
                 if (!cansetobstacles) {
                     return false;
                 }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x = (int) event.getX();
-                        y = (int) event.getY();
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         orientation = (int) obstacle7.getRotation();
                         obstacle7.setRotation(0);
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        dx = (int) event.getX() - x;
-                        dy = (int) event.getY() - y;
 
-                        obstacle7.setX(obstacle7.getX() + dx);
-                        obstacle7.setY(obstacle7.getY() + dy);
+                    case MotionEvent.ACTION_MOVE:
+                        float x = event.getRawX();
+                        float y = event.getRawY();
+                        dX = x - lastX;
+                        dY = y - lastY;
+
+                        float newX = obstacle7.getX() + dX;
+                        float newY = obstacle7.getY() + dY;
+
+                        int obstacleWidth = obstacle7.getWidth();
+                        int obstacleHeight = obstacle7.getHeight();
+
+                        int gridWidth = 23 * 35; // 700 pixels
+                        int gridHeight = 20 * 35; // 700 pixels
+
+                        if (newX < 0) {
+                            newX = 0;
+                        } else if (newX + obstacleWidth > gridWidth) {
+                            newX = gridWidth - obstacleWidth;
+                        }
+
+                        if (newY < 0) {
+                            newY = 0;
+                        } else if (newY + obstacleHeight > gridHeight) {
+                            newY = gridHeight - obstacleHeight;
+                        }
+
+                        obstacle7.setX(newX);
+                        obstacle7.setY(newY);
+
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle7.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle7.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        // Log.d(TAG, "obstacle7 is at " + snapToX + "," + snapToY);
+                        int snapToX = ((int) ((obstacle7.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        int snapToY = ((int) ((obstacle7.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        Log.d(TAG, "obstacle7 is at " + snapToX + "," + snapToY);
                         obstacle7.setX(snapToX);
                         obstacle7.setY(snapToY);
                         obstacle7.setRotation(orientation % 360);
                         break;
+
                     default:
                         break;
                 }
@@ -651,11 +867,12 @@ public class Arena extends AppCompatActivity {
             }
         });
 
+
         obstacle8.setOnTouchListener(new View.OnTouchListener() {
-            int x = 0;
-            int y = 0;
-            int dx = 0;
-            int dy = 0;
+            int lastX = 0;
+            int lastY = 0;
+            float dX = 0;
+            float dY = 0;
             int orientation;
 
             @Override
@@ -663,30 +880,58 @@ public class Arena extends AppCompatActivity {
                 if (!cansetobstacles) {
                     return false;
                 }
+
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        x = (int) event.getX();
-                        y = (int) event.getY();
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         orientation = (int) obstacle8.getRotation();
                         obstacle8.setRotation(0);
                         break;
-                    case MotionEvent.ACTION_MOVE:
-                        dx = (int) event.getX() - x;
-                        dy = (int) event.getY() - y;
 
-                        obstacle8.setX(obstacle8.getX() + dx);
-                        obstacle8.setY(obstacle8.getY() + dy);
+                    case MotionEvent.ACTION_MOVE:
+                        float x = event.getRawX();
+                        float y = event.getRawY();
+                        dX = x - lastX;
+                        dY = y - lastY;
+
+                        float newX = obstacle8.getX() + dX;
+                        float newY = obstacle8.getY() + dY;
+
+                        int obstacleWidth = obstacle8.getWidth();
+                        int obstacleHeight = obstacle8.getHeight();
+
+                        int gridWidth = 23 * 35; // 700 pixels
+                        int gridHeight = 20 * 35; // 700 pixels
+
+                        if (newX < 0) {
+                            newX = 0;
+                        } else if (newX + obstacleWidth > gridWidth) {
+                            newX = gridWidth - obstacleWidth;
+                        }
+
+                        if (newY < 0) {
+                            newY = 0;
+                        } else if (newY + obstacleHeight > gridHeight) {
+                            newY = gridHeight - obstacleHeight;
+                        }
+
+                        obstacle8.setX(newX);
+                        obstacle8.setY(newY);
+
+                        lastX = (int) event.getRawX();
+                        lastY = (int) event.getRawY();
                         break;
+
                     case MotionEvent.ACTION_UP:
-                        int snapToX = ((int) ((obstacle8.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        int snapToY = ((int) ((obstacle8.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL))
-                                * SNAP_GRID_INTERVAL;
-                        // Log.d(TAG, "obstacle8 is at " + snapToX + "," + snapToY);
+                        int snapToX = ((int) ((obstacle8.getX() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        int snapToY = ((int) ((obstacle8.getY() + SNAP_GRID_INTERVAL / 2) / SNAP_GRID_INTERVAL)) * SNAP_GRID_INTERVAL;
+                        Log.d(TAG, "obstacle8 is at " + snapToX + "," + snapToY);
                         obstacle8.setX(snapToX);
                         obstacle8.setY(snapToY);
                         obstacle8.setRotation(orientation % 360);
                         break;
+
                     default:
                         break;
                 }
@@ -2505,7 +2750,7 @@ public class Arena extends AppCompatActivity {
 
                     // update obstacle ID (format - TARGET,obstacle_number,target_ID)
                     case Helper.TARGET:
-                        int obstacleNumber = Character.getNumericValue(message.charAt(7));
+                        int obstacleNumber = Character.getNumericValue(message.charAt(7)) - 1;
                         String solution = message.substring(9);
                         Log.d(TAG, "Solution value: " + solution);
                         if (Integer.parseInt(solution) == 0) {
@@ -2514,7 +2759,7 @@ public class Arena extends AppCompatActivity {
                             // RMB TO PLUS 1 !!
                             setObstacleImageID(obstacleNumber + 1, solution);
                             Toast.makeText(Arena.this,
-                                    "Obstacle " + obstacleNumber + " changed to Target ID: " + solution,
+                                    "Obstacle " + (obstacleNumber + 1) + " changed to Target ID: " + solution,
                                     Toast.LENGTH_SHORT).show();
                         }
                         break;
