@@ -3,6 +3,7 @@ package com.example.mdp;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -33,6 +34,8 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
@@ -247,6 +250,16 @@ public class Bluetooth extends AppCompatActivity {
     public void toggleButtonScan(View view) {
         Log.d(TAG, "toggleButton: Scanning for unpaired devices.");
         myNewBluetoothDevices.clear();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+                Log.e(TAG, "BLUETOOTH_SCAN permission not granted.");
+                return;
+            }
+        }
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter != null && bluetoothAdapter.isDiscovering()) {
+            Log.d(TAG, "Device is currently discovering Bluetooth devices.");
+        }
         if (myBluetoothAdapter != null) {
             if (!myBluetoothAdapter.isEnabled()) {
                 Toast.makeText(Bluetooth.this, "Please turn on Bluetooth first!", Toast.LENGTH_SHORT).show();
@@ -283,12 +296,23 @@ public class Bluetooth extends AppCompatActivity {
     // check bluetooth permission before using it
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void checkBTPermissions() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
-            int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
-            permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
-            if (permissionCheck != 0) {
-                this.requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.ACCESS_COARSE_LOCATION }, 1001);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) { // Android 12+ (API 31+)
+            int scanPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_SCAN);
+            int connectPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT);
+
+            if (scanPermission != PackageManager.PERMISSION_GRANTED || connectPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT},
+                        1001);
+            }
+        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) { // Android 6-11 (API 23-30)
+            int fineLocationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            int coarseLocationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+
+            if (fineLocationPermission != PackageManager.PERMISSION_GRANTED || coarseLocationPermission != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1001);
             }
         } else {
             Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
