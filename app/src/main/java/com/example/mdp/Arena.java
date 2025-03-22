@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.animation.ObjectAnimator;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -58,11 +63,11 @@ public class Arena extends AppCompatActivity {
         }
 
         // Save car coordinates and direction text
-        if (car_x != null && car_y != null && car_dir != null) {
-            editor.putString("x_tv", car_x.getText().toString());
-            editor.putString("y_tv", car_y.getText().toString());
-            editor.putString("car_dir", car_dir.getText().toString());
-        }
+//        if (car_x != null && car_y != null && car_dir != null) {
+//            editor.putString("x_tv", car_x.getText().toString());
+//            editor.putString("y_tv", car_y.getText().toString());
+//            editor.putString("car_dir", car_dir.getText().toString());
+//        }
 
         // Save obstacle positions and rotations
         for (Map.Entry<Integer, ImageView> entry : obstacles.entrySet()) {
@@ -94,11 +99,11 @@ public class Arena extends AppCompatActivity {
         }
 
         // Load car coordinates and direction text
-        if (car_x != null && car_y != null && car_dir != null) {
-            car_x.setText(sharedPreferences.getString("x_tv", ""));
-            car_y.setText(sharedPreferences.getString("y_tv", ""));
-            car_dir.setText(sharedPreferences.getString("car_dir", ""));
-        }
+//        if (car_x != null && car_y != null && car_dir != null) {
+//            car_x.setText(sharedPreferences.getString("x_tv", ""));
+//            car_y.setText(sharedPreferences.getString("y_tv", ""));
+//            car_dir.setText(sharedPreferences.getString("car_dir", ""));
+//        }
 
         // Load obstacle positions and rotations
         for (Map.Entry<Integer, ImageView> entry : obstacles.entrySet()) {
@@ -129,7 +134,7 @@ public class Arena extends AppCompatActivity {
     private boolean cansetobstacles = false;
     private String curMode = "IDLE";
 
-    Button IRButton, SPButton, resetButton, preset1Button, setButton, timerButton, saveButton;
+    Button IRButton, SPButton, resetButton, preset1Button, setButton, timerButton, saveButton, showObstacleButton;
     ImageView obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6, obstacle7, obstacle8, car;
     TextView statusWindow, car_x, car_y, car_dir;
 
@@ -166,7 +171,7 @@ public class Arena extends AppCompatActivity {
 
         initialiseObstacles();
         initialiseButtons();
-        initialiseMovementButtons();
+//        initialiseMovementButtons();
 
         loaddata();
 
@@ -177,6 +182,9 @@ public class Arena extends AppCompatActivity {
             savesdata();
         }
     }
+
+
+
 
     /**
      * Initializes obstacles and setup listeners
@@ -293,24 +301,24 @@ public class Arena extends AppCompatActivity {
                 //STM:ADD,3,16,15,N         |         STM:ADD,<obstacleID>,<x>,<y>,<direction>
                 //STM:SUB 3                 |         STM:SUB <obstacleID>
 
-                if(BluetoothService.BluetoothConnectionStatus){
-                    if(getObstacleString(obstacle).isEmpty()){
-                        String btRemoveObstacleMsg = "STM:SUB," + obstacleName.replace("obstacle", "");
-                        BluetoothService.write(btRemoveObstacleMsg.getBytes(StandardCharsets.UTF_8));
-                    }else{
-                        String btSnapToGridMessage = "STM:ADD,"+obstacleName.replace("obstacle", "") + "," + getObstacleString(obstacle);
-                        btSnapToGridMessage = btSnapToGridMessage.substring(0, btSnapToGridMessage.length() - 1);
-                        BluetoothService.write(btSnapToGridMessage.getBytes(StandardCharsets.UTF_8));
-                    }
-
-
-                }else {
-                    Log.d(TAG, "Bluetooth not connected");
-                }
-
                 obstacle.setX(snapToX);
                 obstacle.setY(snapToY);
                 obstacle.setRotation(orientation % 360);
+
+                String btSnapToGridMessage = "STM:ADD,"+obstacleName.replace("obstacle", "") + "," + getObstacleString(obstacle);
+                btSnapToGridMessage = btSnapToGridMessage.substring(0, btSnapToGridMessage.length() - 1);
+                Log.d("amu", btSnapToGridMessage);
+
+                if(BluetoothService.BluetoothConnectionStatus){
+                    if(getObstacleString(obstacle).isEmpty()){
+                        String btRemoveObstacleMsg = "STM:SUB," + obstacleName.replace("obstacle", "");
+                        //BluetoothService.write(btRemoveObstacleMsg.getBytes(StandardCharsets.UTF_8));
+                    }else{
+                        //BluetoothService.write(btSnapToGridMessage.getBytes(StandardCharsets.UTF_8));
+                    }
+                }else {
+                    Log.d(TAG, "Bluetooth not connected");
+                }
             }
         });
     }
@@ -320,19 +328,24 @@ public class Arena extends AppCompatActivity {
      */
     private void setObstacleImageID(int obstacleNumber, String image) {
         int orientation = (int) obstacles.get(obstacleNumber).getRotation();
+        Log.d("amu","obstacle id "+obstacleNumber+" orientation is " + String.valueOf(orientation));
         ImageView iv = obstacles.get(obstacleNumber);
         Log.d("Obstacle ID", String.valueOf(iv.getId()));
         try {
             if (orientation == 0) {
                 obstacles.get(obstacleNumber).setImageResource(Helper.resources.get(image + "n"));
+                Log.d("amu",image + "casestatement n");
             } else if (orientation == 90) {
                 obstacles.get(obstacleNumber).setImageResource(Helper.resources.get(image + "e"));
+                Log.d("amu",image + "casestatement e");
             } else if (orientation == 180) {
                 obstacles.get(obstacleNumber).setImageResource(Helper.resources.get(image + "s"));
+                Log.d("amu",image + "case statement s");
             } else if (orientation == 270) {
                 obstacles.get(obstacleNumber).setImageResource(Helper.resources.get(image + "w"));
+                Log.d("amu",image + "case statement w");
             } else {
-                obstacles.get(obstacleNumber).setImageResource(Helper.resources.get(image));
+                obstacles.get(obstacleNumber).setImageResource(Helper.resources.get(image + "n"));
                 obstacles.get(obstacleNumber).setRotation(0);
             }
         } catch (Exception e) {
@@ -344,63 +357,63 @@ public class Arena extends AppCompatActivity {
     /*
      * Initializes the arrow buttons
      */
-    private void initialiseMovementButtons() {
-        ImageButton forwardButton = (ImageButton) findViewById(R.id.forwardButton);
-        forwardButton.setOnClickListener(v -> {
-             Log.d(TAG, "forward");
+//    private void initialiseMovementButtons() {
+//        ImageButton forwardButton = (ImageButton) findViewById(R.id.forwardButton);
+//        forwardButton.setOnClickListener(v -> {
+//             Log.d(TAG, "forward");
+//
+//            // Bluetooth message
+//            if (BluetoothService.BluetoothConnectionStatus) {
+//                // byte[] bytes = "STM:w100n".getBytes(Charset.defaultCharset());
+//                byte[] bytes = "STM:n".getBytes(Charset.defaultCharset());
+//                 BluetoothService.write(bytes);
+//            }
+//
+//            // Animation
+//            forwardButton(1);
+//        });
 
-            // Bluetooth message
-            if (BluetoothService.BluetoothConnectionStatus) {
-                // byte[] bytes = "STM:w100n".getBytes(Charset.defaultCharset());
-                byte[] bytes = "STM:n".getBytes(Charset.defaultCharset());
-                 BluetoothService.write(bytes);
-            }
-
-            // Animation
-            forwardButton(1);
-        });
-
-        ImageButton reverseButton = (ImageButton) findViewById(R.id.reverseButton);
-        reverseButton.setOnClickListener(v -> {
-             Log.d(TAG, "reverse");
-
-            // Bluetooth message
-            if (BluetoothService.BluetoothConnectionStatus) {
-                // byte[] bytes = "STM:s100n".getBytes(Charset.defaultCharset());
-                byte[] bytes = "STM:s".getBytes(Charset.defaultCharset());
-                 BluetoothService.write(bytes);
-            }
-
-            // Animation
-            reverseButton(1);
-        });
-
-        ImageButton leftButton = (ImageButton) findViewById(R.id.leftButton);
-        leftButton.setOnClickListener(v -> {
-             Log.d(TAG, "left");
-
-            if (BluetoothService.BluetoothConnectionStatus) {
-                // byte[] bytes = "STM:ln".getBytes(Charset.defaultCharset());
-                byte[] bytes = "STM:w".getBytes(Charset.defaultCharset());
-                 BluetoothService.write(bytes);
-            }
-
-            leftCommand();
-        });
-
-        ImageButton rightButton = (ImageButton) findViewById(R.id.rightButton);
-        rightButton.setOnClickListener(v -> {
-             Log.d(TAG, "right");
-
-            if (BluetoothService.BluetoothConnectionStatus) {
-                // byte[] bytes = "STM:rn".getBytes(Charset.defaultCharset());
-                byte[] bytes = "STM:e".getBytes(Charset.defaultCharset());
-                 BluetoothService.write(bytes);
-            }
-
-            rightCommand();
-        });
-    }
+//        ImageButton reverseButton = (ImageButton) findViewById(R.id.reverseButton);
+//        reverseButton.setOnClickListener(v -> {
+//             Log.d(TAG, "reverse");
+//
+//            // Bluetooth message
+//            if (BluetoothService.BluetoothConnectionStatus) {
+//                // byte[] bytes = "STM:s100n".getBytes(Charset.defaultCharset());
+//                byte[] bytes = "STM:s".getBytes(Charset.defaultCharset());
+//                 BluetoothService.write(bytes);
+//            }
+//
+//            // Animation
+//            reverseButton(1);
+//        });
+//
+//        ImageButton leftButton = (ImageButton) findViewById(R.id.leftButton);
+//        leftButton.setOnClickListener(v -> {
+//             Log.d(TAG, "left");
+//
+//            if (BluetoothService.BluetoothConnectionStatus) {
+//                // byte[] bytes = "STM:ln".getBytes(Charset.defaultCharset());
+//                byte[] bytes = "STM:w".getBytes(Charset.defaultCharset());
+//                 BluetoothService.write(bytes);
+//            }
+//
+//            leftCommand();
+//        });
+//
+//        ImageButton rightButton = (ImageButton) findViewById(R.id.rightButton);
+//        rightButton.setOnClickListener(v -> {
+//             Log.d(TAG, "right");
+//
+//            if (BluetoothService.BluetoothConnectionStatus) {
+//                // byte[] bytes = "STM:rn".getBytes(Charset.defaultCharset());
+//                byte[] bytes = "STM:e".getBytes(Charset.defaultCharset());
+//                 BluetoothService.write(bytes);
+//            }
+//
+//            rightCommand();
+//        });
+//    }
 
     /**
      * Initalizes buttons, car and setup listeners
@@ -408,9 +421,9 @@ public class Arena extends AppCompatActivity {
     private void initialiseButtons() {
         // Declarations
         car = findViewById(R.id.car);
-        car_x = findViewById(R.id.x_tv);
-        car_y = findViewById(R.id.y_tv);
-        car_dir = findViewById(R.id.dir_tv);
+        //car_x = findViewById(R.id.x_tv);
+        //car_y = findViewById(R.id.y_tv);
+       // car_dir = findViewById(R.id.dir_tv);
         IRButton = findViewById(R.id.IRButton);
         SPButton = findViewById(R.id.SPBtn);
         resetButton = findViewById(R.id.resetButton);
@@ -418,7 +431,8 @@ public class Arena extends AppCompatActivity {
         setButton = findViewById(R.id.setButton);
         saveButton = findViewById(R.id.saveButton);
         timerButton = findViewById(R.id.timerButton);
-        statusWindow = findViewById(R.id.statusWindowText);
+        showObstacleButton = findViewById(R.id.showObstacleButton);
+       // statusWindow = findViewById(R.id.statusWindowText);
 
         // Events
         IRButton.setOnClickListener(view -> beginIRTask());
@@ -428,12 +442,51 @@ public class Arena extends AppCompatActivity {
         setButton.setOnClickListener(view -> toggleSetMode());
         saveButton.setOnClickListener(view -> sendObstacles());
         timerButton.setOnClickListener(view -> stopTimerButton());
+        showObstacleButton.setOnClickListener(view -> {showObstacleDialog();});
+
 
         // Initialize car to bottom left
         car.setX(INITIAL_X);
         car.setY(INITIAL_Y);
         updateXYDirText();
     }
+
+    private void showObstacleDialog() {
+        // 1) Collect each obstacle’s string
+        String obstacle1Data = getObstacleString(obstacle1);
+        String obstacle2Data = getObstacleString(obstacle2);
+        String obstacle3Data = getObstacleString(obstacle3);
+        String obstacle4Data = getObstacleString(obstacle4);
+        String obstacle5Data = getObstacleString(obstacle5);
+        String obstacle6Data = getObstacleString(obstacle6);
+        String obstacle7Data = getObstacleString(obstacle7);
+        String obstacle8Data = getObstacleString(obstacle8);
+
+        // 2) Build a multiline string for the dialog message
+        String message =
+                "Obstacle 1 = (" + obstacle1Data + ")\n" +
+                        "Obstacle 2 = (" + obstacle2Data + ")\n" +
+                        "Obstacle 3 = (" + obstacle3Data + ")\n" +
+                        "Obstacle 4 = (" + obstacle4Data + ")\n" +
+                        "Obstacle 5 = (" + obstacle5Data + ")\n" +
+                        "Obstacle 6 = (" + obstacle6Data + ")\n" +
+                        "Obstacle 7 = (" + obstacle7Data + ")\n" +
+                        "Obstacle 8 = (" + obstacle8Data + ")";
+
+        // 3) Create and show an AlertDialog
+        new AlertDialog.Builder(this)
+                .setTitle("Obstacle List")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // You can do something after the user presses OK, or leave empty
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+
+
+
 
     /*
      * Function to wait for certain amount of time
@@ -1491,14 +1544,10 @@ public class Arena extends AppCompatActivity {
         IRTimer.stop();
         updateStatusWindow("Ready");
     }
-
+    //amu: send begin ir task
+    //check the sendObstacles for the format
     private void beginIRTask() {
-        String IRstart = "ALG:START";
-
         if (BluetoothService.BluetoothConnectionStatus) {
-            // Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
-//            byte[] bytes = IRstart.getBytes(Charset.defaultCharset());
-//            BluetoothService.write(bytes);
             sendObstacles();
             Toast.makeText(Arena.this, "Obstacles sent", Toast.LENGTH_SHORT).show();
             updateStatusWindow("IR Started");
@@ -1719,13 +1768,14 @@ public class Arena extends AppCompatActivity {
             Snackbar.make(view, "Object "+ obstacleKey.replace("o","")+ " Rotated to " + direction, Snackbar.LENGTH_SHORT).show();
             String btMessageRotatedObstacle = "STM:ADD,"+ obstacleKey.replace("o","") +"," + getObstacleString(obstacle);
             btMessageRotatedObstacle = btMessageRotatedObstacle.substring(0, btMessageRotatedObstacle.length() - 1);
-
-            BluetoothService.write(btMessageRotatedObstacle.getBytes());
-
+            if(BluetoothService.BluetoothConnectionStatus) {
+                //BluetoothService.write(btMessageRotatedObstacle.getBytes());
+            }
         });
     }
 
-
+//amu: format use this
+    //ALG: x,y,direction,obstacleID(starting from 1);x,y,direction,obstacleID;...  |  ALG:11,16,N,1;4,3,E,2;12,15,W,3;.....11,15,S,8;
     private void sendObstacles() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
@@ -1747,34 +1797,14 @@ public class Arena extends AppCompatActivity {
         }
     }
 
-    /*
-     * Returns 2-D array of obstacles in [x, y, direction] format
-     */
-    private String[][] savedObstacles() {
-        String[][] savedPreset = { getObstacleLocation(obstacle1).split(","), getObstacleLocation(obstacle2).split(","),
-                getObstacleLocation(obstacle3).split(","),
-                getObstacleLocation(obstacle4).split(","), getObstacleLocation(obstacle5).split(","),
-                getObstacleLocation(obstacle6).split(","),
-                getObstacleLocation(obstacle7).split(","), getObstacleLocation(obstacle8).split(",") };
-        // {1,2,N,2,3,E}
-        Log.d(TAG, "Saved obstacle data: " + savedPreset);
-        return savedPreset;
-    }
-
-    /*
-     * Get obstacle location in <x, y, direction> format
-     */
-    private String getObstacleLocation(ImageView obstacle) {
-        return (int) obstacle.getX() + "," + (int) obstacle.getY() + "," + getImageOrientation(obstacle);
-    }
 
     /*
      * Get obstacle location in <x, y, direction> format
      * NOTE: 19 because grid is only 20 x 20
      */
     private String getObstacleString(ImageView obstacle) {
-        int x = (int) obstacle.getX() / SNAP_GRID_INTERVAL;
-        int y = (int) obstacle.getY() / SNAP_GRID_INTERVAL;
+        int x = (int) obstacle.getX() / 35;
+        int y = (int) obstacle.getY() / 35;
         // (0,0) starts from top left hence invert y
         int new_y = 20 - y - 1;
         Log.d(TAG, "Obstacle at " + x + "," + new_y);
@@ -1804,8 +1834,8 @@ public class Arena extends AppCompatActivity {
     }
 
     private void updateStatusWindow(String msg) {
-        statusWindow.setText(msg);
-        Log.d(TAG, "Status window: " + msg);
+        //statusWindow.setText(msg);
+        //Log.d(TAG, "Status window: " + msg);
     }
 
     private void updateRobotPosition(int x, int y, int direction) {
@@ -1849,32 +1879,33 @@ public class Arena extends AppCompatActivity {
         int y = (int) (car.getY() + SNAP_GRID_INTERVAL) / SNAP_GRID_INTERVAL;
         // (0,0) starts from top left hence invert y
         int new_y = 20 - y - 1;
-        car_x.setText(String.valueOf(x));
-        car_y.setText(String.valueOf(new_y));
+        //car_x.setText(String.valueOf(x));
+        //car_y.setText(String.valueOf(new_y));
 
         int direction = (int) car.getRotation();
 
-        if (direction == 315)
-            car_dir.setText("North-West");
-        else if (direction == 0)
-            car_dir.setText("North");
-        else if (direction == 45)
-            car_dir.setText("North-East");
-        else if (direction == 90)
-            car_dir.setText("East");
-        else if (direction == 135)
-            car_dir.setText("South-East");
-        else if (direction == 180)
-            car_dir.setText("South");
-        else if (direction == 225)
-            car_dir.setText("South-West");
-        else if (direction == 270)
-            car_dir.setText("West");
-        else
-            car_dir.setText("None");
+//        if (direction == 315)
+//          //  car_dir.setText("North-West");
+//        else if (direction == 0)
+//            //car_dir.setText("North");
+//        else if (direction == 45)
+//            //car_dir.setText("North-East");
+//        else if (direction == 90)
+//            //car_dir.setText("East");
+//        else if (direction == 135)
+//           // car_dir.setText("South-East");
+//        else if (direction == 180)
+//            //car_dir.setText("South");
+//        else if (direction == 225)
+//            //car_dir.setText("South-West");
+//        else if (direction == 270)
+//            //car_dir.setText("West");
+//        else
+            //car_dir.setText("None");
     }
 
     // Broadcast Receiver for incoming messages
+    //amu: the recieved code is here, change format for ROBOT location here
     BroadcastReceiver myReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -1941,14 +1972,14 @@ public class Arena extends AppCompatActivity {
                             default:
                                 break;
                         }
-
+                        //amu
                         //THIS is the inverted grid, meaning x axis is inverted
-                        updateRobotPosition(Integer.parseInt(x), Integer.parseInt(y), direction_int);
+                        //updateRobotPosition(Integer.parseInt(x), Integer.parseInt(y), direction_int);
 
-                        //this grid is the normal grid, as in the x and y axis makes sense
-                        //updateRobotPosition(Integer.parseInt(x), adjusted_y, direction_int);
+                        //this grid is the normal grid, as in the x and y axis makes senseaamd
+                        updateRobotPosition(Integer.parseInt(x), adjusted_y, direction_int);
                         break;
-
+                    //amu
                     // update obstacle ID (format - TARGET,obstacle_number,target_ID)
                     case Helper.TARGET:
                         int obstacleNumber = Character.getNumericValue(message.charAt(7)) - 1;

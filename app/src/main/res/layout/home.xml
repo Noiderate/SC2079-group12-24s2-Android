@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1C2020"
+    android:background="@drawable/home_background"
     tools:context=".MainActivity">
 
     <!--    <TextView-->
@@ -22,51 +22,80 @@
     <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <ImageView
-        android:id="@+id/title"
-        android:layout_width="372dp"
-        android:layout_height="125dp"
-        android:layout_marginTop="36dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/MDP"
+        android:layout_width="334dp"
+        android:layout_height="87dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/group_name" />
+        app:srcCompat="@drawable/mdp" />
+
+    <ImageView
+        android:id="@+id/G12"
+        android:layout_width="285dp"
+        android:layout_height="77dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="60dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/g12" />
+
+    <ImageView
+        android:id="@+id/mario"
+        android:layout_width="362dp"
+        android:layout_height="163dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="104dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mario" />
+
+    <ImageView
+        android:id="@+id/mario_kart"
+        android:layout_width="587dp"
+        android:layout_height="247dp"
+        android:layout_marginTop="672dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/mario_kart" />
 
     <ImageButton
         android:id="@+id/button3"
-        android:layout_width="372dp"
-        android:layout_height="225dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/mdp_arena"
+        android:layout_width="357dp"
+        android:layout_height="241dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/arena"
         android:paddingTop="70dp"
         android:paddingBottom="70dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/G12" />
 
     <ImageButton
         android:id="@+id/button2"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="50dp"
-        android:background="@drawable/mdp_bluetooth"
+        android:layout_width="326dp"
+        android:layout_height="278dp"
+        android:layout_marginStart="276dp"
+        android:layout_marginBottom="352dp"
+        android:background="@drawable/bluetooth"
         android:paddingTop="70dp"
         android:paddingBottom="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button3"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
         android:id="@+id/button1"
-        android:layout_width="240dp"
-        android:layout_height="240dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="37dp"
-        android:background="@drawable/mdp_messages"
+        android:layout_width="321dp"
+        android:layout_height="275dp"
+        android:layout_marginEnd="260dp"
+        android:layout_marginBottom="256dp"
+        android:background="@drawable/messages"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button3"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintVertical_bias="0.372" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

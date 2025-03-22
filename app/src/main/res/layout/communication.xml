@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#17ACBC">
+    android:background="@drawable/message_background">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:fontFamily="@font/jockey_one_regular"
         android:text="Messages"
         android:textColor="@color/black"
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:background="#E6DDA9"
         android:gravity="bottom"
@@ -46,6 +46,7 @@
         android:text=""
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
@@ -55,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="24dp"
-        android:backgroundTint="#637BC1"
+        android:backgroundTint="#E6DDA9"
         android:fontFamily="@font/jockey_one_regular"
         android:paddingHorizontal="34dp"
         android:paddingVertical="14dp"
@@ -82,6 +83,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chatlog_tv" />
+
+    <ImageView
+        android:id="@+id/element_2"
+        android:layout_width="218dp"
+        android:layout_height="83dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="312dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/element_2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

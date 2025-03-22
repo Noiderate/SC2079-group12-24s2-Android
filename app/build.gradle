@@ -6,7 +6,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.mdp"
+        applicationId "com.example.mdp.ui_corrected"
         minSdk 23
         targetSdk 32
         versionCode 1
