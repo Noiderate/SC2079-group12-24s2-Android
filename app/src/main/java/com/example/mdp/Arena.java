@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Arena extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
-    private static final String TAG = "Arena->DEBUG";
+    private static final String TAG = "amu";
     public static boolean firstStart = true;
 
     public void savesdata() {
@@ -63,15 +63,6 @@ public class Arena extends AppCompatActivity {
             Log.e(TAG, "Car is null, cannot save car data.");
             return; //Exit method to prevent crashing
         }
-
-        // Save car coordinates and direction text
-//        if (car_x != null && car_y != null && car_dir != null) {
-//            editor.putString("x_tv", car_x.getText().toString());
-//            editor.putString("y_tv", car_y.getText().toString());
-//            editor.putString("car_dir", car_dir.getText().toString());
-//        }
-
-        // Save obstacle positions and rotations
         for (Map.Entry<Integer, ImageView> entry : obstacles.entrySet()) {
             int obstacleId = entry.getKey();
             ImageView obstacle = entry.getValue();
@@ -99,13 +90,6 @@ public class Arena extends AppCompatActivity {
         } else {
             Log.e(TAG, "Car is null, cannot load car data.");
         }
-
-        // Load car coordinates and direction text
-//        if (car_x != null && car_y != null && car_dir != null) {
-//            car_x.setText(sharedPreferences.getString("x_tv", ""));
-//            car_y.setText(sharedPreferences.getString("y_tv", ""));
-//            car_dir.setText(sharedPreferences.getString("car_dir", ""));
-//        }
 
         // Load obstacle positions and rotations
         for (Map.Entry<Integer, ImageView> entry : obstacles.entrySet()) {
@@ -183,7 +167,7 @@ public class Arena extends AppCompatActivity {
 
         initialiseObstacles();
         initialiseButtons();
-//        initialiseMovementButtons();
+        initialiseMovementButtons();
 
         loaddata();
 
@@ -415,14 +399,6 @@ public class Arena extends AppCompatActivity {
 
         ImageButton rightButton = (ImageButton) findViewById(R.id.rightbutton);
         rightButton.setOnClickListener(v -> {
-            Log.d(TAG, "right");
-
-            if (BluetoothService.BluetoothConnectionStatus) {
-                // byte[] bytes = "STM:rn".getBytes(Charset.defaultCharset());
-                byte[] bytes = "STM:e".getBytes(Charset.defaultCharset());
-                BluetoothService.write(bytes);
-            }
-
             rightCommand();
         });
     }
