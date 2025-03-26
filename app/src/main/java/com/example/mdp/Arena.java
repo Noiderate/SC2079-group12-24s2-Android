@@ -17,6 +17,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageButton;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -131,10 +133,11 @@ public class Arena extends AppCompatActivity {
     private final int INITIAL_X = 1 * SNAP_GRID_INTERVAL - SNAP_GRID_INTERVAL;
     private final int INITIAL_Y = 18 * SNAP_GRID_INTERVAL - SNAP_GRID_INTERVAL;
 
+    private int initialMarginTop, initialMarginStart;
     private boolean cansetobstacles = false;
     private String curMode = "IDLE";
 
-    Button IRButton, SPButton, resetButton, preset1Button, setButton, timerButton, saveButton, showObstacleButton;
+    ImageButton IRButton, SPButton, resetButton, setButton, timerButton, showObstacleButton, done;
     ImageView obstacle1, obstacle2, obstacle3, obstacle4, obstacle5, obstacle6, obstacle7, obstacle8, car;
     TextView statusWindow, car_x, car_y, car_dir;
 
@@ -163,7 +166,16 @@ public class Arena extends AppCompatActivity {
         // Restore saved instance state
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate called");
+        setContentView(R.layout.arena);  // Replace with your actual layout file
+        ImageView car = findViewById(R.id.car);
+        // Get the LayoutParams
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) car.getLayoutParams();
 
+        // Save initial margins
+        initialMarginTop = params.topMargin;
+        initialMarginStart = params.leftMargin;  // Use leftMargin for Start
+
+        Log.d("CarInitial", "Saved Margins - Top: " + initialMarginTop + ", Start: " + initialMarginStart);
         setContentView(R.layout.arena);
 
         // start listening for incoming messages
@@ -357,63 +369,64 @@ public class Arena extends AppCompatActivity {
     /*
      * Initializes the arrow buttons
      */
-//    private void initialiseMovementButtons() {
-//        ImageButton forwardButton = (ImageButton) findViewById(R.id.forwardButton);
-//        forwardButton.setOnClickListener(v -> {
-//             Log.d(TAG, "forward");
-//
-//            // Bluetooth message
-//            if (BluetoothService.BluetoothConnectionStatus) {
-//                // byte[] bytes = "STM:w100n".getBytes(Charset.defaultCharset());
-//                byte[] bytes = "STM:n".getBytes(Charset.defaultCharset());
-//                 BluetoothService.write(bytes);
-//            }
-//
-//            // Animation
-//            forwardButton(1);
-//        });
+    private void initialiseMovementButtons() {
+        ImageButton forwardButton = (ImageButton) findViewById(R.id.forwardbutton);
+        forwardButton.setOnClickListener(v -> {
+            Log.d(TAG, "forward");
 
-//        ImageButton reverseButton = (ImageButton) findViewById(R.id.reverseButton);
-//        reverseButton.setOnClickListener(v -> {
-//             Log.d(TAG, "reverse");
-//
-//            // Bluetooth message
-//            if (BluetoothService.BluetoothConnectionStatus) {
-//                // byte[] bytes = "STM:s100n".getBytes(Charset.defaultCharset());
-//                byte[] bytes = "STM:s".getBytes(Charset.defaultCharset());
-//                 BluetoothService.write(bytes);
-//            }
-//
-//            // Animation
-//            reverseButton(1);
-//        });
-//
-//        ImageButton leftButton = (ImageButton) findViewById(R.id.leftButton);
-//        leftButton.setOnClickListener(v -> {
-//             Log.d(TAG, "left");
-//
-//            if (BluetoothService.BluetoothConnectionStatus) {
-//                // byte[] bytes = "STM:ln".getBytes(Charset.defaultCharset());
-//                byte[] bytes = "STM:w".getBytes(Charset.defaultCharset());
-//                 BluetoothService.write(bytes);
-//            }
-//
-//            leftCommand();
-//        });
-//
-//        ImageButton rightButton = (ImageButton) findViewById(R.id.rightButton);
-//        rightButton.setOnClickListener(v -> {
-//             Log.d(TAG, "right");
-//
-//            if (BluetoothService.BluetoothConnectionStatus) {
-//                // byte[] bytes = "STM:rn".getBytes(Charset.defaultCharset());
-//                byte[] bytes = "STM:e".getBytes(Charset.defaultCharset());
-//                 BluetoothService.write(bytes);
-//            }
-//
-//            rightCommand();
-//        });
-//    }
+            // Bluetooth message
+            if (BluetoothService.BluetoothConnectionStatus) {
+                // byte[] bytes = "STM:w100n".getBytes(Charset.defaultCharset());
+                byte[] bytes = "STM:n".getBytes(Charset.defaultCharset());
+                BluetoothService.write(bytes);
+            }
+
+            // Animation
+            forwardButton(1);
+        });
+
+        ImageButton reverseButton = (ImageButton) findViewById(R.id.reversebutton);
+        reverseButton.setOnClickListener(v -> {
+            Log.d(TAG, "reverse");
+
+            // Bluetooth message
+            if (BluetoothService.BluetoothConnectionStatus) {
+                // byte[] bytes = "STM:s100n".getBytes(Charset.defaultCharset());
+                byte[] bytes = "STM:s".getBytes(Charset.defaultCharset());
+                BluetoothService.write(bytes);
+            }
+
+            // Animation
+            reverseButton(1);
+        });
+
+        ImageButton leftButton = (ImageButton) findViewById(R.id.leftbutton);
+        leftButton.setOnClickListener(v -> {
+            Log.d(TAG, "left");
+
+            if (BluetoothService.BluetoothConnectionStatus) {
+                // byte[] bytes = "STM:ln".getBytes(Charset.defaultCharset());
+                byte[] bytes = "STM:w".getBytes(Charset.defaultCharset());
+                BluetoothService.write(bytes);
+            }
+
+            leftCommand();
+        });
+
+        ImageButton rightButton = (ImageButton) findViewById(R.id.rightbutton);
+        rightButton.setOnClickListener(v -> {
+            Log.d(TAG, "right");
+
+            if (BluetoothService.BluetoothConnectionStatus) {
+                // byte[] bytes = "STM:rn".getBytes(Charset.defaultCharset());
+                byte[] bytes = "STM:e".getBytes(Charset.defaultCharset());
+                BluetoothService.write(bytes);
+            }
+
+            rightCommand();
+        });
+    }
+
 
     /**
      * Initalizes buttons, car and setup listeners
@@ -427,10 +440,10 @@ public class Arena extends AppCompatActivity {
         IRButton = findViewById(R.id.IRButton);
         SPButton = findViewById(R.id.SPBtn);
         resetButton = findViewById(R.id.resetButton);
-        preset1Button = findViewById(R.id.preset1Button);
+        //preset1Button = findViewById(R.id.preset1Button);
         setButton = findViewById(R.id.setButton);
-        saveButton = findViewById(R.id.saveButton);
-        timerButton = findViewById(R.id.timerButton);
+        //saveButton = findViewById(R.id.saveButton);
+        Button timerButton = findViewById(R.id.timerButton);
         showObstacleButton = findViewById(R.id.showObstacleButton);
        // statusWindow = findViewById(R.id.statusWindowText);
 
@@ -438,9 +451,9 @@ public class Arena extends AppCompatActivity {
         IRButton.setOnClickListener(view -> beginIRTask());
         SPButton.setOnClickListener(view -> beginSPTask());
         resetButton.setOnClickListener(view -> setResetButton());
-        preset1Button.setOnClickListener(view -> setPreset1Button());
+        //preset1Button.setOnClickListener(view -> setPreset1Button());
         setButton.setOnClickListener(view -> toggleSetMode());
-        saveButton.setOnClickListener(view -> sendObstacles());
+        //saveButton.setOnClickListener(view -> sendObstacles());
         timerButton.setOnClickListener(view -> stopTimerButton());
         showObstacleButton.setOnClickListener(view -> {showObstacleDialog();});
 
@@ -450,6 +463,8 @@ public class Arena extends AppCompatActivity {
         car.setY(INITIAL_Y);
         updateXYDirText();
     }
+
+
 
     private void showObstacleDialog() {
         // 1) Collect each obstacle’s string
@@ -1617,8 +1632,20 @@ public class Arena extends AppCompatActivity {
         obstacle8.setTranslationX(0);
         obstacle8.setTranslationY(0);
 
-        car.setX(INITIAL_X);
-        car.setY(INITIAL_Y);
+        ImageView car = findViewById(R.id.car);
+
+        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) car.getLayoutParams();
+        params.topMargin = initialMarginTop;
+        params.leftMargin = initialMarginStart;
+
+        car.setLayoutParams(params);  // Apply the changes
+
+        Log.d("CarReset", "Reset to Margins - Top: " + initialMarginTop + ", Start: " + initialMarginStart);
+
+        Toast.makeText(this, "Car Reset to Initial Position", Toast.LENGTH_SHORT).show();
+
+//        car.setX(INITIAL_X);
+//        car.setY(INITIAL_Y);
         car.setRotation(0);
         updateXYDirText();
 
@@ -1651,65 +1678,66 @@ public class Arena extends AppCompatActivity {
         Toast.makeText(this, "Map Reset", Toast.LENGTH_SHORT).show();
     }
 
-    private void setPreset1Button() {
-        updateStatusWindow("Ready");
-
-        obstacle1.setX(350);
-        obstacle1.setY(70);
-        obstacle1.setRotation(180);
-        obstacle1.setImageResource(Helper.resources.get("o1s"));
-
-        obstacle2.setX(595);
-        obstacle2.setY(70);
-        obstacle2.setRotation(270);
-        obstacle2.setImageResource(Helper.resources.get("o2w"));
-
-        obstacle3.setX(70);
-        obstacle3.setY(105);
-        obstacle3.setRotation(180);
-        obstacle3.setImageResource(Helper.resources.get("o3s"));
-
-        obstacle4.setX(560);
-        obstacle4.setY(525);
-        obstacle4.setRotation(180);
-        obstacle4.setImageResource(Helper.resources.get("o4s"));
-
-        obstacle5.setX(455);
-        obstacle5.setY(630);
-        obstacle5.setRotation(270);
-        obstacle5.setImageResource(Helper.resources.get("o5w"));
-
-        obstacle6.setX(210);
-        obstacle6.setY(455);
-        obstacle6.setRotation(0);
-        obstacle6.setImageResource(Helper.resources.get("o6n"));
-
-        obstacle7.setX(315);
-        obstacle7.setY(280);
-        obstacle7.setRotation(270);
-        obstacle7.setImageResource(Helper.resources.get("o7w"));
-
-        obstacle8.setX(105);
-        obstacle8.setY(560);
-        obstacle8.setRotation(90);
-        obstacle8.setImageResource(Helper.resources.get("o8e"));
-
-        Toast.makeText(Arena.this, "Preset 1 Applied", Toast.LENGTH_SHORT).show();
-    }
-
+//    private void setPreset1Button() {
+//        updateStatusWindow("Ready");
+//
+//        obstacle1.setX(350);
+//        obstacle1.setY(70);
+//        obstacle1.setRotation(180);
+//        obstacle1.setImageResource(Helper.resources.get("o1s"));
+//
+//        obstacle2.setX(595);
+//        obstacle2.setY(70);
+//        obstacle2.setRotation(270);
+//        obstacle2.setImageResource(Helper.resources.get("o2w"));
+//
+//        obstacle3.setX(70);
+//        obstacle3.setY(105);
+//        obstacle3.setRotation(180);
+//        obstacle3.setImageResource(Helper.resources.get("o3s"));
+//
+//        obstacle4.setX(560);
+//        obstacle4.setY(525);
+//        obstacle4.setRotation(180);
+//        obstacle4.setImageResource(Helper.resources.get("o4s"));
+//
+//        obstacle5.setX(455);
+//        obstacle5.setY(630);
+//        obstacle5.setRotation(270);
+//        obstacle5.setImageResource(Helper.resources.get("o5w"));
+//
+//        obstacle6.setX(210);
+//        obstacle6.setY(455);
+//        obstacle6.setRotation(0);
+//        obstacle6.setImageResource(Helper.resources.get("o6n"));
+//
+//        obstacle7.setX(315);
+//        obstacle7.setY(280);
+//        obstacle7.setRotation(270);
+//        obstacle7.setImageResource(Helper.resources.get("o7w"));
+//
+//        obstacle8.setX(105);
+//        obstacle8.setY(560);
+//        obstacle8.setRotation(90);
+//        obstacle8.setImageResource(Helper.resources.get("o8e"));
+//
+//        Toast.makeText(Arena.this, "Preset 1 Applied", Toast.LENGTH_SHORT).show();
+//    }
 
 
 
     private void toggleSetMode() {
         cansetobstacles = !cansetobstacles;
-        if (curMode.equals("IDLE")) {
-            curMode = "SET";
-            setButton.setText("Done");
-            Toast.makeText(this, "In set mode", Toast.LENGTH_SHORT).show();
-        } else if (curMode.equals("SET")) {
-            curMode = "IDLE";
-            setButton.setText("Set");
-            Toast.makeText(this, "Obstacles set", Toast.LENGTH_SHORT).show();
+        try {
+            if (curMode.equals("IDLE")) {
+                curMode = "SET";
+                setButton.setImageResource(R.drawable.done);
+            } else {
+                curMode = "IDLE";
+                setButton.setImageResource(R.drawable.set);
+            }
+        } catch (Exception e) {
+            Log.e("toggleSetMode", "Error: " + e.getMessage());
         }
     }
 

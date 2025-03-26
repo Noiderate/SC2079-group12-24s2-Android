@@ -17,12 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/car"
-        android:layout_width="100px"
-        android:layout_height="100px"
-        app:srcCompat="@drawable/racing_car" />
-
     <!-- Sliding Drawer Container -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,11 +29,21 @@
             android:id="@+id/view"
             android:layout_width="75dp"
             android:layout_height="526dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="0dp"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/obstaclemenu" />
+
+        <ImageView
+            android:id="@+id/flower"
+            android:layout_width="75dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="375dp"
+            android:scaleType="fitXY"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/flower" />
 
         <ImageView
             android:id="@+id/obstacle1"
@@ -131,15 +135,13 @@
 
             <ImageView
                 android:id="@+id/informationBackgroundImg"
-                android:layout_width="598dp"
-                android:layout_height="325dp"
+                android:layout_width="838dp"
+                android:layout_height="843dp"
+                android:layout_marginTop="58dp"
                 android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.304"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="1.0"
                 app:srcCompat="@drawable/informationbackground" />
 
             <TextView
@@ -154,37 +156,23 @@
                 tools:layout_editor_absoluteX="221dp"
                 tools:layout_editor_absoluteY="53dp" />
 
-            <Button
-                android:id="@+id/setButton"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:backgroundTint="#FFA500"
-                android:fontFamily="@font/jockey_one_regular"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="12dp"
-                android:text="Set"
-                android:textColor="#FFFFFF"
-                android:textSize="19sp"
-                app:layout_constraintBottom_toBottomOf="@+id/mapControlTitle"
-                app:layout_constraintStart_toEndOf="@+id/mapControlTitle"
-                app:layout_constraintTop_toTopOf="@+id/mapControlTitle"
-                app:layout_constraintVertical_bias="0.432" />
-
             <!-- Removed reverseButton, forwardButton, leftButton, rightButton -->
+
+            <!-- Re-anchor mapControlTitle to parent/statusWindowText
+                 instead of referencing arrow buttons -->
 
             <Button
                 android:id="@+id/timerButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="236dp"
-                android:backgroundTint="#dc4048"
+                android:layout_marginTop="430dp"
+                android:backgroundTint="#9C27B0"
                 android:fontFamily="@font/jockey_one_regular"
                 android:text="Stop timer"
                 android:textColor="#ffffff"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="@+id/IRTimer"
-                app:layout_constraintHorizontal_bias="0.548"
+                app:layout_constraintHorizontal_bias="0.475"
                 app:layout_constraintStart_toStartOf="@+id/IRTimer"
                 app:layout_constraintTop_toTopOf="@+id/informationBackgroundImg" />
 
@@ -192,217 +180,190 @@
                 android:id="@+id/IRTimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="468dp"
-                android:textColor="#FF0000"
+                android:layout_marginTop="440dp"
+                android:textColor="@color/black"
                 android:textSize="30dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.182"
+                app:layout_constraintHorizontal_bias="0.106"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Re-anchor mapControlTitle to parent/statusWindowText
-                 instead of referencing arrow buttons -->
+            <!--            <TextView-->
+            <!--                android:id="@+id/presetControlTitle"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="50dp"-->
+            <!--                android:fontFamily="@font/jockey_one_regular"-->
+            <!--                android:text="Preset Controls:"-->
+            <!--                android:textColor="@color/white"-->
+            <!--                android:textSize="18sp"-->
+            <!--                app:layout_constraintEnd_toEndOf="@+id/commandControlsTitle"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/commandControlsTitle" />-->
 
-            <TextView
-                android:id="@+id/mapControlTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="236dp"
-                android:layout_marginTop="252dp"
-                android:fontFamily="@font/jockey_one_regular"
-                android:text="Map Controls:"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                android:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/statusWindowText" />
+            <!--            <Button-->
+            <!--                android:id="@+id/preset1Button"-->
+            <!--                android:layout_width="95dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginLeft="20dp"-->
+            <!--                android:backgroundTint="#000000"-->
+            <!--                android:fontFamily="@font/jockey_one_regular"-->
+            <!--                android:paddingHorizontal="15dp"-->
+            <!--                android:paddingVertical="12dp"-->
+            <!--                android:text="Load"-->
+            <!--                android:textColor="#FFFFFF"-->
+            <!--                android:textSize="20sp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/presetControlTitle"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/presetControlTitle"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/presetControlTitle" />-->
 
-            <TextView
-                android:id="@+id/commandControlsTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:fontFamily="@font/jockey_one_regular"
-                android:text="Command Controls:"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                app:layout_constraintEnd_toEndOf="@+id/mapControlTitle"
-                app:layout_constraintTop_toBottomOf="@+id/mapControlTitle" />
+            <!--            <Button-->
+            <!--                android:id="@+id/saveButton"-->
+            <!--                android:layout_width="95dp"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginLeft="20dp"-->
+            <!--                android:backgroundTint="#000000"-->
+            <!--                android:fontFamily="@font/jockey_one_regular"-->
+            <!--                android:paddingHorizontal="15dp"-->
+            <!--                android:paddingVertical="12dp"-->
+            <!--                android:text="Save"-->
+            <!--                android:textColor="#FFFFFF"-->
+            <!--                android:textSize="20sp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/preset1Button"-->
+            <!--                app:layout_constraintStart_toEndOf="@+id/preset1Button"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/preset1Button" />-->
 
-            <TextView
-                android:id="@+id/presetControlTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="50dp"
-                android:fontFamily="@font/jockey_one_regular"
-                android:text="Preset Controls:"
-                android:textColor="@color/white"
-                android:textSize="18sp"
-                app:layout_constraintEnd_toEndOf="@+id/commandControlsTitle"
-                app:layout_constraintTop_toBottomOf="@+id/commandControlsTitle" />
-
-            <Button
-                android:id="@+id/preset1Button"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:backgroundTint="#000000"
-                android:fontFamily="@font/jockey_one_regular"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="12dp"
-                android:text="Load"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/presetControlTitle"
-                app:layout_constraintStart_toEndOf="@+id/presetControlTitle"
-                app:layout_constraintTop_toTopOf="@+id/presetControlTitle" />
-
-            <Button
-                android:id="@+id/saveButton"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:backgroundTint="#000000"
-                android:fontFamily="@font/jockey_one_regular"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="12dp"
-                android:text="Save"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/preset1Button"
-                app:layout_constraintStart_toEndOf="@+id/preset1Button"
-                app:layout_constraintTop_toTopOf="@+id/preset1Button" />
-
-            <Button
-                android:id="@+id/IRButton"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:backgroundTint="#A62424"
-                android:fontFamily="@font/jockey_one_regular"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="12dp"
-                android:text="IR"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/commandControlsTitle"
-                app:layout_constraintStart_toEndOf="@+id/commandControlsTitle"
-                app:layout_constraintTop_toTopOf="@+id/commandControlsTitle" />
-
-            <Button
-                android:id="@+id/SPBtn"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:backgroundTint="#A62424"
-                android:fontFamily="@font/jockey_one_regular"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="12dp"
-                android:text="SP"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/IRButton"
-                app:layout_constraintStart_toEndOf="@+id/IRButton"
-                app:layout_constraintTop_toTopOf="@+id/IRButton"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <Button
-                android:id="@+id/resetButton"
-                android:layout_width="95dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+            <ImageButton
+                android:id="@+id/setButton"
+                android:layout_width="152dp"
+                android:layout_height="645dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="56dp"
+                android:background="@null"
                 android:backgroundTint="#FFA500"
-                android:fontFamily="@font/jockey_one_regular"
-                android:paddingHorizontal="14dp"
-                android:paddingVertical="12dp"
-                android:text="Reset"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="@+id/setButton"
-                app:layout_constraintStart_toEndOf="@+id/setButton"
-                app:layout_constraintTop_toTopOf="@+id/setButton" />
+                android:contentDescription="Set"
+                android:scaleType="fitCenter"
+                android:src="@drawable/set"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <!-- Show Obstacle button anchored to the top-right
-                 relative to mapControlTitle & the parent -->
-            <Button
+            <ImageButton
+                android:id="@+id/IRButton"
+                android:layout_width="152dp"
+                android:layout_height="645dp"
+                android:layout_marginStart="308dp"
+                android:layout_marginTop="56dp"
+                android:background="@null"
+                android:backgroundTint="#A62424"
+                android:contentDescription="IR"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ir"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/SPBtn"
+                android:layout_width="152dp"
+                android:layout_height="645dp"
+                android:layout_marginStart="460dp"
+                android:layout_marginTop="56dp"
+                android:background="@null"
+                android:backgroundTint="#A62424"
+                android:contentDescription="SP"
+                android:scaleType="fitCenter"
+                android:src="@drawable/sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/resetButton"
+                android:layout_width="152dp"
+                android:layout_height="645dp"
+                android:layout_marginStart="156dp"
+                android:layout_marginTop="56dp"
+                android:background="@null"
+                android:backgroundTint="#FFA500"
+                android:contentDescription="Reset"
+                android:scaleType="fitCenter"
+                android:src="@drawable/reset"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
                 android:id="@+id/showObstacleButton"
-                android:layout_width="119dp"
-                android:layout_height="108dp"
-                android:layout_marginEnd="416dp"
-                android:backgroundTint="#888888"
-                android:fontFamily="@font/jockey_one_regular"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="15dp"
-                android:text="Show Obstacle"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp"
+                android:layout_width="133dp"
+                android:layout_height="173dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="40dp"
+                android:background="@null"
+                android:contentDescription="Show Obstacle"
+                android:scaleType="fitXY"
+                android:src="@drawable/showobstacle"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageButton
+                android:id="@+id/reversebutton"
+                android:layout_width="92dp"
+                android:layout_height="102dp"
+                android:layout_marginTop="464dp"
+                android:layout_marginEnd="248dp"
+                android:background="@null"
+                android:contentDescription="Show Obstacle"
+                android:scaleType="fitXY"
+                android:src="@drawable/reversebutton"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/mapControlTitle"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/forwardbutton"
+                android:layout_width="91dp"
+                android:layout_height="90dp"
+                android:layout_marginEnd="248dp"
+                android:layout_marginBottom="112dp"
+                android:background="@null"
+                android:contentDescription="Show Obstacle"
+                android:scaleType="fitXY"
+                android:src="@drawable/forwardbutton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageButton
+                android:id="@+id/leftbutton"
+                android:layout_width="76dp"
+                android:layout_height="84dp"
+                android:layout_marginEnd="336dp"
+                android:layout_marginBottom="64dp"
+                android:background="@null"
+                android:contentDescription="Show Obstacle"
+                android:scaleType="fitXY"
+                android:src="@drawable/leftbutton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageButton
+                android:id="@+id/rightbutton"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginEnd="168dp"
+                android:layout_marginBottom="68dp"
+                android:background="@null"
+                android:contentDescription="Show Obstacle"
+                android:scaleType="fitXY"
+                android:src="@drawable/rightbutton"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="531dp" />
-
-        <!-- Status Window -->
+        <ImageView
+            android:id="@+id/car"
+            android:layout_width="400px"
+            android:layout_height="400px"
+            app:srcCompat="@drawable/car"
+            android:layout_marginTop="-220dp"
+            android:layout_marginStart="-220dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="679dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <SlidingDrawer
-            android:id="@+id/drawer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:content="@+id/content"
-            android:handle="@+id/handle"
-            android:orientation="horizontal"
-            android:rotation="180">
-
-            <ImageView
-                android:id="@id/handle"
-                android:layout_width="50dip"
-                android:layout_height="50dip"
-                android:rotation="180"
-                android:src="@drawable/ic_baseline_camera_alt_24"
-                android:translationY="-193dp" />
-
-            <LinearLayout
-                android:id="@id/content"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:background="#282A3A"
-                android:orientation="vertical"
-                android:rotation="180">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="--------------------Snapshots-----------------"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="28dp" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recylerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-
-            </LinearLayout>
-
-        </SlidingDrawer>
-
-    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
